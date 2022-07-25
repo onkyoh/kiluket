@@ -25,11 +25,12 @@ const GameScreen = () => {
   return (
     <>
     {initialLocation &&
-      <MapContainer className="map" center={initialLocation} zoom={21}>
+      <MapContainer className="map" center={initialLocation} zoom={19} dragging={false} zoomControl={false} attributionControl={false}>
           <TileLayer
-              attribution='&copy; <a href="http://www.thunderforest.com/">Thunderforest</a>, &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-              url='https://tile.thunderforest.com/pioneer/{z}/{x}/{y}.png?apikey=323de4ff1d9b4e2cbca29a784ef077d5'
-              maxZoom={22}
+              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
+              url='https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'
+              maxZoom={19}
+              minZoom={19}
           />
           <SetCenter />
       </MapContainer>
@@ -39,3 +40,4 @@ const GameScreen = () => {
 }
 
 export default GameScreen
+
