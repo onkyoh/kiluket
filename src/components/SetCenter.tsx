@@ -1,50 +1,62 @@
 import Leaflet from "leaflet"
-import { useEffect, useState} from "react"
+import { useEffect } from "react"
 import { useMap, Marker } from "react-leaflet"
 
-const SetCenter = () => {
+
+interface IProps {
+    updatedLocation: [number, number]
+    setUpdatedLocation: (coords: [number, number]) => void
+    setPreviousLocation: (coords: [number, number]) => void
+}
+
+const SetCenter = ({updatedLocation, setUpdatedLocation, setPreviousLocation}: IProps) => {
     const map = useMap()
-    const [usersLocation, setUsersLocation] = useState<[number, number]>([0, 0])
 
     const icon = Leaflet.divIcon({
         className: 'icon',
         iconSize: [100, 100]
     })
 
+    const setViewOptions = {
+        animate: true,
+        easeLinearity: 1,
+        duration: 0.1
+    }
 
     const success = (position: { coords: { latitude: number; longitude: number } }) => {
-       let  location: [number, number] = [position.coords.latitude, position.coords.longitude]
-       map.setView(location, 19)
-       setUsersLocation([...location])
-       console.log('updated position')
+        let  location: [number, number] = [position.coords.latitude, position.coords.longitude]
+        if (location[0] === updatedLocation[0] && location[1] === updatedLocation[1]) {
+            console.log('same location')
+            return
+        }
+        if (updatedLocation[0] === 0 && updatedLocation[1] === 0) {
+            console.log('took initial location')
+            return
+        }
+       map.setView(location, 19, setViewOptions)
+       setPreviousLocation([...updatedLocation])
+       setUpdatedLocation([...location])
+       console.log('diff location')
+
     }
 
     const error = (error: {message: string}) => {
         console.log(error.message)
     }
 
-    const options = {
-        enableHighAccuracy: true
-    }
-
     useEffect(() => {
-        let location: [number, number] = [50, 50]
-        navigator.geolocation.getCurrentPosition(
-          (position) => {
-              location = [position.coords.latitude, position.coords.longitude]
-              map.setView(location, 19)
-              setUsersLocation([...location])
-          },
-          () => {console.log('error')},
-          options
-        )
-      }, [map, options])
+        navigator.geolocation.getCurrentPosition(success, error, {
+            enableHighAccuracy: true
+        })
+      }, [map])
 
-    navigator.geolocation.watchPosition(success, error, options);
+    navigator.geolocation.watchPosition(success, error, {
+        enableHighAccuracy: true
+    });
     
 
     return (
-        <Marker icon={icon} position={usersLocation}/>
+        <Marker icon={icon} position={updatedLocation} keyboard={false}/>
     )
 }
 

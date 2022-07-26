@@ -24,3 +24,13 @@ body {
     background-color: black;
     filter: opacity(0.2) invert(1);
 }
+
+.shadow {
+    background-color: white;
+    box-shadow: 0px 0px 4px white;
+    border-radius: 50%;
+}
+
+.distance {
+    color: white;
+}
