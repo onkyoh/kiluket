@@ -13,26 +13,12 @@ const GameScreen = () => {
   const [initialLocation, setInitialLocation] = useState<undefined | [number, number]>()
   const [updatedLocation, setUpdatedLocation] = useState<[number, number]>(initialLocation || [0, 0])
   const [previousLocation, setPreviousLocation] = useState<[number, number]>()
-  const [distanceTravelled, setDistanceTravelled] = useState('')
   const [shadows, setShadows] = useState<any[]>([])
 
   const shadowIcon = Leaflet.divIcon({
     className: 'shadow',
     iconSize: [30, 30],
-    html: `<div>${distanceTravelled}</div>`
   })
-
-  const success = (position: { coords: { latitude: number; longitude: number } }) => {
-      let  location: [number, number] = [position.coords.latitude, position.coords.longitude]
-      setInitialLocation([...location])
-      setUpdatedLocation([...location])
-  }
-
-  const failure = (err: {message: string}) => {
-    console.log(err.message)
-  }
-
-  navigator.geolocation.getCurrentPosition(success, failure)
 
   const amountOfShadows = () => {
     let shadowNumber = Math.round(Math.random() * 7)
@@ -62,15 +48,29 @@ const GameScreen = () => {
     if (previousLocation) {
       xChange = previousLocation[1] - updatedLocation[1]
       yChange = previousLocation[0] - updatedLocation[0]
-      setDistanceTravelled(xChange + ' ' + yChange)
+      if ((xChange || yChange > 0.0003) || (xChange || yChange < -0.0003)) {
+        populateShadows()
+      }
     }
-    populateShadows()
-    console.log(xChange, yChange)
   }, [updatedLocation])
 
   const shadowClicked = (id: number) => {
     console.log(id)
   }
+
+  const success = (position: { coords: { latitude: number; longitude: number } }) => {
+    let  location: [number, number] = [position.coords.latitude, position.coords.longitude]
+    setInitialLocation([...location])
+    setUpdatedLocation([...location])
+    populateShadows()
+    
+}
+
+const failure = (err: {message: string}) => {
+  console.log(err.message)
+}
+
+navigator.geolocation.getCurrentPosition(success, failure)
 
 
 
@@ -89,8 +89,7 @@ const GameScreen = () => {
                 <Marker key={shadow.id} icon={shadowIcon} position={shadow.position} eventHandlers={{
                   click: () => shadowClicked(shadow.id),
                 }}>
-                  
-                  </Marker>
+                </Marker>
             ))}
             <SetCenter updatedLocation={updatedLocation} setUpdatedLocation={setUpdatedLocation} setPreviousLocation={setPreviousLocation}/>
         </MapContainer>
