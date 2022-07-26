@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { MapContainer, Marker, TileLayer} from 'react-leaflet'
 import Leaflet from "leaflet"
 import SetCenter from './SetCenter'
+import verifyMoved from '../utils/verifyMoved'
 
 interface shadow {
   id: number
@@ -45,15 +46,10 @@ const GameScreen = () => {
   }
 
   useEffect(() => {
-    let xChange: number = 0
-    let yChange: number = 0
-    if (previousLocation) {
-      xChange = previousLocation[1] - updatedLocation[1]
-      yChange = previousLocation[0] - updatedLocation[0]
-      if ((xChange || yChange > 0.0003) || (xChange || yChange < -0.0003)) {
-        populateShadows(updatedLocation)
-        console.log("shadows updated")
-      }
+    const repopulateShadows = verifyMoved(previousLocation!, updatedLocation)
+    if (repopulateShadows) {
+      populateShadows(updatedLocation)
+      console.log("shadows updated")
     }
   }, [updatedLocation])
 

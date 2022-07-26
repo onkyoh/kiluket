@@ -1,6 +1,7 @@
 import Leaflet from "leaflet"
 import { useEffect } from "react"
 import { useMap, Marker } from "react-leaflet"
+import verifyMoved from '../utils/verifyMoved'
 
 
 interface IProps {
@@ -34,7 +35,10 @@ const SetCenter = ({updatedLocation, setUpdatedLocation, setPreviousLocation}: I
             return
         }
        map.setView(location, 19, setViewOptions)
-       setPreviousLocation([...updatedLocation])
+       const newPrevious = verifyMoved(updatedLocation, location)
+       if (newPrevious) {
+        setPreviousLocation([...updatedLocation])
+       }
        setUpdatedLocation([...location])
        console.log('diff location')
 
