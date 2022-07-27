@@ -7,11 +7,20 @@ import verifyMoved from '../utils/verifyMoved'
 interface IProps {
     updatedLocation: [number, number]
     setUpdatedLocation: (coords: [number, number]) => void
+    previousLocation: [number, number] | undefined
     setPreviousLocation: (coords: [number, number]) => void
 }
 
-const SetCenter = ({updatedLocation, setUpdatedLocation, setPreviousLocation}: IProps) => {
+interface IPosition {
+    coords: {
+        latitude: number
+        longitude: number
+    }
+}
+
+const SetCenter = ({updatedLocation, setUpdatedLocation, previousLocation, setPreviousLocation}: IProps) => {
     const map = useMap()
+    const markerLocation = updatedLocation
 
     const icon = Leaflet.divIcon({
         className: 'icon',
@@ -24,24 +33,22 @@ const SetCenter = ({updatedLocation, setUpdatedLocation, setPreviousLocation}: I
         duration: 0.1
     }
 
-    const success = (position: { coords: { latitude: number; longitude: number } }) => {
+    const success = (position: IPosition) => {
         let  location: [number, number] = [position.coords.latitude, position.coords.longitude]
         if (location[0] === updatedLocation[0] && location[1] === updatedLocation[1]) {
-            console.log('same location')
             return
         }
         if (updatedLocation[0] === 0 && updatedLocation[1] === 0) {
-            console.log('took initial location')
             return
         }
+        if (previousLocation) {
+            const newPrevious = verifyMoved([...previousLocation], [...location])
+            if (newPrevious) {
+             setPreviousLocation([...location])
+            }
+        }
        map.setView(location, 19, setViewOptions)
-       const newPrevious = verifyMoved(updatedLocation, location)
-       if (newPrevious) {
-        setPreviousLocation([...updatedLocation])
-       }
        setUpdatedLocation([...location])
-       console.log('diff location')
-
     }
 
     const error = (error: {message: string}) => {
@@ -57,10 +64,52 @@ const SetCenter = ({updatedLocation, setUpdatedLocation, setPreviousLocation}: I
     navigator.geolocation.watchPosition(success, error, {
         enableHighAccuracy: true
     });
+
+    //so we can simulate travelling with keyclick
+
+    const moveCenter = (direction: string) => {
+        let location: [number, number] = [...updatedLocation]
+          if (direction === 'left') {
+            location[1] -= 0.0002
+          }
+          if (direction === 'up') {
+            location[0] += 0.0002
+          }
+          if (direction === 'right') {
+            location[1] += 0.0002
+          } 
+          if (direction === 'down') {
+            location[0] -= 0.0002
+          }
+          const position: IPosition = {
+              coords: {
+                  latitude: location[0],
+                  longitude: location[1]
+              }
+          }
+          success(position)
+      }
+      
+    const keyDownHandler = (e: { keyCode: number }) => {
+        switch (e.keyCode) {
+          case 37: moveCenter('left'); break;
+          case 38: moveCenter('up'); break;
+          case 39: moveCenter('right'); break;
+          case 40: moveCenter('down'); break;
+        default: return;
+        }
+      };
     
+      
+    useEffect(() => {
+        window.addEventListener('keydown', keyDownHandler);
+        return () => {
+          window.removeEventListener('keydown', keyDownHandler);
+        };
+      }, [updatedLocation]);
 
     return (
-        <Marker icon={icon} position={updatedLocation} keyboard={false}/>
+        <Marker icon={icon} position={markerLocation} keyboard={false}/>
     )
 }
 

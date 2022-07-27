@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react'
 import { MapContainer, Marker, TileLayer} from 'react-leaflet'
 import Leaflet from "leaflet"
 import SetCenter from './SetCenter'
-import verifyMoved from '../utils/verifyMoved'
 
 interface shadow {
   id: number
@@ -10,8 +9,7 @@ interface shadow {
 }
 
 const GameScreen = () => {
-  const [initialLocation, setInitialLocation] = useState<undefined | [number, number]>()
-  const [updatedLocation, setUpdatedLocation] = useState<[number, number]>(initialLocation || [0, 0])
+  const [updatedLocation, setUpdatedLocation] = useState<[number, number]>([0, 0])
   const [previousLocation, setPreviousLocation] = useState<[number, number]>()
   const [shadows, setShadows] = useState<any[]>([])
 
@@ -25,7 +23,7 @@ const GameScreen = () => {
     return shadowNumber
   }
 
-  const populateShadows = (currentPos: number[] | undefined) => {
+  const populateShadows = (currentPos: [number, number] | undefined) => {
     if (!currentPos) {
       return
     }
@@ -42,16 +40,11 @@ const GameScreen = () => {
         }
     }
     setShadows([...tempShadows])
-    console.log(tempShadows)
   }
 
   useEffect(() => {
-    const repopulateShadows = verifyMoved(previousLocation!, updatedLocation)
-    if (repopulateShadows) {
-      populateShadows(updatedLocation)
-      console.log("shadows updated")
-    }
-  }, [updatedLocation])
+      populateShadows([...updatedLocation])
+  }, [previousLocation])
 
   const shadowClicked = (id: number) => {
     console.log(id)
@@ -59,9 +52,9 @@ const GameScreen = () => {
 
   const success = (position: { coords: { latitude: number; longitude: number } }) => {
     let  location: [number, number] = [position.coords.latitude, position.coords.longitude]
-    setInitialLocation([...location])
+    setPreviousLocation([...location])
     setUpdatedLocation([...location])
-    populateShadows(location)
+    populateShadows([...location])
 }
 
 const failure = (err: {message: string}) => {
@@ -76,22 +69,23 @@ useEffect(() => {
 
   return (
     <>
-    {initialLocation ?
+    {updatedLocation[0] !== 0 ?
       <>
-        <MapContainer className="map" center={updatedLocation || initialLocation} zoom={19} dragging={false} zoomControl={false} doubleClickZoom={false} attributionControl={false} touchZoom={false}>
+        <MapContainer className="map" center={updatedLocation} zoom={19} dragging={false} zoomControl={false} doubleClickZoom={false} attributionControl={false} touchZoom={false} keyboard={false}>
             <TileLayer
-                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
-                url='https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'
+                attribution='<a href="http://jawg.io" title="Tiles Courtesy of Jawg Maps" target="_blank">&copy; <b>Jawg</b>Maps</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                url='https://{s}.tile.jawg.io/jawg-matrix/{z}/{x}/{y}{r}.png?access-token=TEwC0gi2f3HbyX3sTW2LZNx9of0KLaJzin0ad6WCTU5MnKDRzORanl3GSxeTMAzy'
                 maxZoom={19}
                 minZoom={19}
+                accessToken={'TEwC0gi2f3HbyX3sTW2LZNx9of0KLaJzin0ad6WCTU5MnKDRzORanl3GSxeTMAzy'}
             />
             {shadows.length > 0 && shadows.map((shadow: shadow) => (
-                <Marker key={shadow.id} icon={shadowIcon} position={shadow.position} eventHandlers={{
+                <Marker key={shadow.id} icon={shadowIcon} position={shadow.position} keyboard={false} eventHandlers={{
                   click: () => shadowClicked(shadow.id),
                 }}>
                 </Marker>
             ))}
-            <SetCenter updatedLocation={updatedLocation} setUpdatedLocation={setUpdatedLocation} setPreviousLocation={setPreviousLocation}/>
+            <SetCenter updatedLocation={updatedLocation} setUpdatedLocation={setUpdatedLocation} previousLocation={previousLocation} setPreviousLocation={setPreviousLocation}/>
         </MapContainer>
       </>
       :
@@ -102,4 +96,3 @@ useEffect(() => {
 }
 
 export default GameScreen
-

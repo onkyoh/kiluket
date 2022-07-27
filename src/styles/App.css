@@ -28,7 +28,7 @@ body {
 }
 
 .shadow {
-  background-color: white;
+  background-color: black;
   -webkit-box-shadow: 0px 0px 4px white;
           box-shadow: 0px 0px 4px white;
   border-radius: 50%;
