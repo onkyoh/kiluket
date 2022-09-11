@@ -9,6 +9,7 @@ interface IProps {
     setUpdatedLocation: (coords: [number, number]) => void
     previousLocation: [number, number] | undefined
     setPreviousLocation: (coords: [number, number]) => void
+    inGame: boolean
 }
 
 interface IPosition {
@@ -18,13 +19,13 @@ interface IPosition {
     }
 }
 
-const SetCenter = ({updatedLocation, setUpdatedLocation, previousLocation, setPreviousLocation}: IProps) => {
+const SetCenter = ({updatedLocation, setUpdatedLocation, previousLocation, setPreviousLocation, inGame}: IProps) => {
     const map = useMap()
     const markerLocation = updatedLocation
 
     const icon = Leaflet.divIcon({
         className: 'icon',
-        iconSize: [100, 100]
+        iconSize: [50, 50]
     })
 
     const setViewOptions = {
@@ -102,10 +103,13 @@ const SetCenter = ({updatedLocation, setUpdatedLocation, previousLocation, setPr
     
       
     useEffect(() => {
+      if (!inGame) {
         window.addEventListener('keydown', keyDownHandler);
         return () => {
           window.removeEventListener('keydown', keyDownHandler);
         };
+      }
+   
       }, [updatedLocation]);
 
     return (

@@ -8,6 +8,7 @@
 body {
   width: 100vw;
   height: 100vh;
+  overflow: hidden;
 }
 
 #root {
@@ -36,5 +37,89 @@ body {
 
 .distance {
   color: white;
+}
+
+.play_screen {
+  width: 100%;
+  height: 100%;
+  z-index: 1000;
+  background-color: white;
+  position: relative;
+}
+
+.grid_layout {
+  display: -ms-grid;
+  display: grid;
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+      grid-template-areas: ". a ." "b . c" ". d .";
+  margin: auto;
+}
+
+.grid_layout button {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  -webkit-transition: background-color 0.3s ease-in-out;
+  transition: background-color 0.3s ease-in-out;
+}
+
+.grid_layout button:nth-of-type(1) {
+  -ms-grid-row: 1;
+  -ms-grid-column: 2;
+  grid-area: a;
+}
+
+.grid_layout button:nth-of-type(2) {
+  -ms-grid-row: 2;
+  -ms-grid-column: 1;
+  grid-area: b;
+}
+
+.grid_layout button:nth-of-type(3) {
+  -ms-grid-row: 2;
+  -ms-grid-column: 3;
+  grid-area: c;
+}
+
+.grid_layout button:nth-of-type(4) {
+  -ms-grid-row: 3;
+  -ms-grid-column: 2;
+  grid-area: d;
+}
+
+.nav {
+  position: absolute;
+  margin: auto;
+  bottom: 2em;
+  width: 100%;
+  z-index: 400;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+}
+
+.nav button {
+  z-index: 400;
+  width: 3em;
+  height: 3em;
+}
+
+.nav_directory {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  background-color: white;
+  top: 0;
+  z-index: 401;
 }
 /*# sourceMappingURL=App.css.map */
