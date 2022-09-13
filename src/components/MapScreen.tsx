@@ -2,7 +2,8 @@ import { useEffect, useState } from 'react'
 import { MapContainer, Marker, TileLayer} from 'react-leaflet'
 import Leaflet from "leaflet"
 import SetCenter from './SetCenter'
-import Inventory from './Inventory'
+import Inventory from '../navComponents/Inventory'
+import Quests from '../navComponents/Quests'
 
 interface shadow {
   id: number
@@ -63,13 +64,14 @@ const MapScreen = ({setInGame, inGame, setLightStorage, lightStorage}: IProps) =
   }, [previousLocation])
 
   const shadowClicked = (id: number) => {
-    console.log(id)
     setInGame(true)
   }
 
   const success = (position: { coords: { latitude: number; longitude: number } }) => {
     let  location: [number, number] = [position.coords.latitude, position.coords.longitude]
-    setPreviousLocation([...location])
+    if (!previousLocation) {
+      setPreviousLocation([...location])
+    }
     setUpdatedLocation([...location])
     populateShadows([...location])
 }
@@ -97,7 +99,6 @@ const [nav, setNav] = useState('none')
 let popupShown;
 
 const handleNav = (popup: string) => {
-  console.log('tried to nav to', popup)
   setNav(popup)
 }
 
@@ -107,7 +108,10 @@ switch (nav) {
   break;
   case 'inv':
   popupShown = <Inventory setNav={setNav} lightStorage={lightStorage} setLightStorage={setLightStorage}/>
-  break;     
+  break;
+  case 'quests':
+  popupShown = <Quests setNav={setNav} lightStorage={lightStorage} setLightStorage={setLightStorage}/>
+  break;           
 }
 
   return (
@@ -134,7 +138,6 @@ switch (nav) {
                 <div className='nav'>
                   <button onClick={() => handleNav('inv')}>I</button>
                   <button onClick={() => handleNav('quests')}>Q</button>
-                  <button onClick={() => handleNav('completed')}>C</button>
                   <button>L</button>
                 </div>
                 

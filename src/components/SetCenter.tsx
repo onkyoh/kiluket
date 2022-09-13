@@ -110,7 +110,7 @@ const SetCenter = ({updatedLocation, setUpdatedLocation, previousLocation, setPr
         };
       }
    
-      }, [updatedLocation]);
+      }, [updatedLocation, inGame]);
 
     return (
         <Marker icon={icon} position={markerLocation} keyboard={false}/>

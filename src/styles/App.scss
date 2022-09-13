@@ -1,13 +1,32 @@
+@font-face {
+    font-family: Pixel;
+    src: url(/src/styles/Minecraft.ttf);
+}
+
 @mixin flexCenter() {
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
+$green: rgb(37, 233, 37);
+$light-green: rgba(37, 233, 37, 0.5);
+$blue: rgb(7, 63, 218);
+$light-blue: rgba(7, 63, 218, 0.5);
+$purple: rgb(120, 14, 241);
+$light-purple: rgba(120, 14, 241, 0.5);
+$red: rgb(241, 14, 44);
+$light-red: rgba(241, 14, 44, 0.5);
+$yellow: rgb(241, 226, 14);
+$light-yellow: rgba(241, 226, 14, 0.5);
+
+
 * {
     padding: 0;
     margin: 0;
     box-sizing: border-box;
+    font-family: Pixel;
+    font-size: 18px;
 }
 
 body {
@@ -88,8 +107,9 @@ body {
     justify-content: space-around;
     button {
         z-index: 400;
-        width: 3em;
-        height: 3em;
+        font-size: 2em;
+        height: 1em;
+        width: 1em;
     }
 }
 
@@ -100,4 +120,77 @@ body {
     background-color: white;
     top: 0;
     z-index: 401;
+}
+
+.inventory {
+    .delete_modal {
+        @include flexCenter();
+        flex-direction: column;
+        border: 1px solid black;
+        width: 300px;
+        background-color: white;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        translate: -50% -50%;
+        text-align: center;
+        gap: 1em;
+        padding: 1em;
+        box-shadow: 0px 0px 100vmax 100vmax rgba(15, 15, 15, 0.5);
+    }
+}
+
+.quests {
+    @include flexCenter();
+    flex-direction: column;
+    overflow: auto;
+    .size_container {
+        @include flexCenter();
+        width: 95%;
+        .color_container {
+            width: 70px;
+            height: 70px;
+            @include flexCenter();
+        }
+    }
+  
+}
+.quest_light {
+    aspect-ratio: 1/1;
+    border-radius: 50%;
+}
+
+.three {width: 40%;}
+
+.four {width: 50%;}
+
+.five {width: 60%;}
+
+.six {width: 70%;}
+
+.seven {width: 80%;}
+
+.green {
+  background-color: $light-green;
+  box-shadow: 0px 0px 15px 4px $green;
+}
+
+.blue {
+   background-color: $light-blue;
+   box-shadow: 0px 0px 15px 4px $blue;
+}
+
+.purple {
+   background-color: $light-purple;
+   box-shadow: 0px 0px 15px 4px $purple;
+}
+
+.red {
+   background-color: $light-red;
+   box-shadow: 0px 0px 15px 4px $red;
+}
+
+.yellow {
+   background-color: $light-yellow;
+   box-shadow: 0px 0px 15px 4px $yellow;
 }

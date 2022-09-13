@@ -36,11 +36,18 @@ const Inventory = ({setNav, lightStorage, setLightStorage}: IProps) => {
         setSelectedLights([...tempSelected])
     }
 
-    const deleteLights = () => {
+    const deleteConfirmed = () => {
         let currentLights = [...lightStorage]
         let newLights = currentLights.filter(light => !selectedLights.includes(light))
         setLightStorage([...newLights])
         setSelectedLights([])
+    }
+
+    const [showDelete, setShowDelete] = useState(false)
+
+    const handleConfirmation = () => {
+        // show/hide confirmation screen to delete selected lights
+        setShowDelete(!showDelete)
     }
 
     useEffect(() => {
@@ -48,9 +55,9 @@ const Inventory = ({setNav, lightStorage, setLightStorage}: IProps) => {
     }, [])
 
   return (
-    <div className='nav_directory'>
+    <div className='nav_directory inventory'>
         <button onClick={backToMap}>Back</button>
-        <button onClick={deleteLights} disabled={selectedLights.length < 1 && false}>Delete</button>
+        <button onClick={handleConfirmation} disabled={selectedLights.length < 1 && true}>Delete</button>
         <div className='lights_grid'>
             {lightStorage.map((light: ILights) => (
                 <div key={light.id} onClick={() => select(light.id)} style={selectedLights.findIndex(selected => selected.id === light.id) > -1 ? {...selected} : {}}>
@@ -58,6 +65,13 @@ const Inventory = ({setNav, lightStorage, setLightStorage}: IProps) => {
                 </div>
             ))}
         </div>
+        {showDelete && <div className='delete_modal'>
+            <h4>Are you sure you wish to release these lights?</h4>
+            <p>You cannot undo this action after confirmation.</p>
+            <button onClick={deleteConfirmed}>Confirm</button>
+            <button onClick={handleConfirmation}>Cancel</button>
+        </div>
+        }
     </div>
   )
 }

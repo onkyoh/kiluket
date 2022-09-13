@@ -1,8 +1,13 @@
+@font-face {
+  font-family: Pixel;
+  src: url(/src/styles/Minecraft.ttf);
+}
 * {
   padding: 0;
   margin: 0;
-  -webkit-box-sizing: border-box;
-          box-sizing: border-box;
+  box-sizing: border-box;
+  font-family: Pixel;
+  font-size: 18px;
 }
 
 body {
@@ -24,14 +29,12 @@ body {
 .icon {
   border-radius: 50%;
   background-color: black;
-  -webkit-filter: opacity(0.2) invert(1);
-          filter: opacity(0.2) invert(1);
+  filter: opacity(0.2) invert(1);
 }
 
 .shadow {
   background-color: black;
-  -webkit-box-shadow: 0px 0px 4px white;
-          box-shadow: 0px 0px 4px white;
+  box-shadow: 0px 0px 4px white;
   border-radius: 50%;
 }
 
@@ -48,44 +51,29 @@ body {
 }
 
 .grid_layout {
-  display: -ms-grid;
   display: grid;
   width: -webkit-fit-content;
   width: -moz-fit-content;
   width: fit-content;
-      grid-template-areas: ". a ." "b . c" ". d .";
+  grid-template-areas: ". a ." "b . c" ". d .";
   margin: auto;
 }
-
 .grid_layout button {
   width: 100px;
   height: 100px;
   border-radius: 50%;
-  -webkit-transition: background-color 0.3s ease-in-out;
   transition: background-color 0.3s ease-in-out;
 }
-
 .grid_layout button:nth-of-type(1) {
-  -ms-grid-row: 1;
-  -ms-grid-column: 2;
   grid-area: a;
 }
-
 .grid_layout button:nth-of-type(2) {
-  -ms-grid-row: 2;
-  -ms-grid-column: 1;
   grid-area: b;
 }
-
 .grid_layout button:nth-of-type(3) {
-  -ms-grid-row: 2;
-  -ms-grid-column: 3;
   grid-area: c;
 }
-
 .grid_layout button:nth-of-type(4) {
-  -ms-grid-row: 3;
-  -ms-grid-column: 2;
   grid-area: d;
 }
 
@@ -95,23 +83,16 @@ body {
   bottom: 2em;
   width: 100%;
   z-index: 400;
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  -ms-flex-pack: distribute;
-      justify-content: space-around;
+  justify-content: center;
+  align-items: center;
+  justify-content: space-around;
 }
-
 .nav button {
   z-index: 400;
-  width: 3em;
-  height: 3em;
+  font-size: 2em;
+  height: 1em;
+  width: 1em;
 }
 
 .nav_directory {
@@ -122,4 +103,92 @@ body {
   top: 0;
   z-index: 401;
 }
-/*# sourceMappingURL=App.css.map */
+
+.inventory .delete_modal {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  border: 1px solid black;
+  width: 300px;
+  background-color: white;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  translate: -50% -50%;
+  text-align: center;
+  gap: 1em;
+  padding: 1em;
+  box-shadow: 0px 0px 100vmax 100vmax rgba(15, 15, 15, 0.5);
+}
+
+.quests {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  overflow: auto;
+}
+.quests .size_container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 95%;
+}
+.quests .size_container .color_container {
+  width: 70px;
+  height: 70px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.quest_light {
+  aspect-ratio: 1/1;
+  border-radius: 50%;
+}
+
+.three {
+  width: 40%;
+}
+
+.four {
+  width: 50%;
+}
+
+.five {
+  width: 60%;
+}
+
+.six {
+  width: 70%;
+}
+
+.seven {
+  width: 80%;
+}
+
+.green {
+  background-color: rgba(37, 233, 37, 0.5);
+  box-shadow: 0px 0px 15px 4px rgb(37, 233, 37);
+}
+
+.blue {
+  background-color: rgba(7, 63, 218, 0.5);
+  box-shadow: 0px 0px 15px 4px rgb(7, 63, 218);
+}
+
+.purple {
+  background-color: rgba(120, 14, 241, 0.5);
+  box-shadow: 0px 0px 15px 4px rgb(120, 14, 241);
+}
+
+.red {
+  background-color: rgba(241, 14, 44, 0.5);
+  box-shadow: 0px 0px 15px 4px rgb(241, 14, 44);
+}
+
+.yellow {
+  background-color: rgba(241, 226, 14, 0.5);
+  box-shadow: 0px 0px 15px 4px rgb(241, 226, 14);
+}/*# sourceMappingURL=App.css.map */
