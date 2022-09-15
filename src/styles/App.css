@@ -1,12 +1,7 @@
-@font-face {
-  font-family: Pixel;
-  src: url(/src/styles/Minecraft.ttf);
-}
 * {
   padding: 0;
   margin: 0;
   box-sizing: border-box;
-  font-family: Pixel;
   font-size: 18px;
 }
 
@@ -104,6 +99,23 @@ body {
   z-index: 401;
 }
 
+.inventory .lights_grid {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  gap: 1em;
+  width: 100%;
+  padding: 1em;
+}
+.inventory .lights_grid .lights_container {
+  width: 100px;
+  height: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 .inventory .delete_modal {
   display: flex;
   justify-content: center;
@@ -122,30 +134,41 @@ body {
   box-shadow: 0px 0px 100vmax 100vmax rgba(15, 15, 15, 0.5);
 }
 
+.lights {
+  aspect-ratio: 1/1;
+  border-radius: 50%;
+}
+
 .quests {
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
   overflow: auto;
+  gap: 1.5em;
 }
 .quests .size_container {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 95%;
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+  border-radius: 15px;
+  overflow: hidden;
+  transition: all 0.5s ease-in-out;
 }
 .quests .size_container .color_container {
-  width: 70px;
-  height: 70px;
+  width: 60px;
+  height: 60px;
   display: flex;
   justify-content: center;
   align-items: center;
+  transition: all 0.5s ease-in-out;
 }
-
-.quest_light {
-  aspect-ratio: 1/1;
-  border-radius: 50%;
+.quests .locked {
+  filter: blur(7.5px);
+  box-shadow: none;
 }
 
 .three {

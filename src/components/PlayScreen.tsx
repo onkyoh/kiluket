@@ -151,7 +151,7 @@ const keyDownHandler = (e: { keyCode: number }) => {
       setIsPLaying(true)
       setTimeout(() => {
         setIsPLaying(false)
-      }, currentDifficulty * (pattern.length + 1))
+      }, currentDifficulty * (10))
     }, currentDifficulty * (pattern.length + 1))
     
   }

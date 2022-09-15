@@ -21,7 +21,11 @@ const Inventory = ({setNav, lightStorage, setLightStorage}: IProps) => {
     }
 
     const selected = {
-        backgroundColor: 'lightgray'
+        boxShadow: `0px 10px 0px -5px #FFFFFF,
+         0px -10px 0px -5px #FFFFFF,
+         10px 0px 0px -5px #FFFFFF,
+         -10px 0px 0px -5px #FFFFFF,
+         0px 0px 0px 5px #FF0000`
     }
 
     const select = (id: string) => {
@@ -41,6 +45,7 @@ const Inventory = ({setNav, lightStorage, setLightStorage}: IProps) => {
         let newLights = currentLights.filter(light => !selectedLights.includes(light))
         setLightStorage([...newLights])
         setSelectedLights([])
+        setShowDelete(false)
     }
 
     const [showDelete, setShowDelete] = useState(false)
@@ -60,8 +65,8 @@ const Inventory = ({setNav, lightStorage, setLightStorage}: IProps) => {
         <button onClick={handleConfirmation} disabled={selectedLights.length < 1 && true}>Delete</button>
         <div className='lights_grid'>
             {lightStorage.map((light: ILights) => (
-                <div key={light.id} onClick={() => select(light.id)} style={selectedLights.findIndex(selected => selected.id === light.id) > -1 ? {...selected} : {}}>
-                    <div>{light.type}</div>
+                <div key={light.id} className='lights_container' onClick={() => select(light.id)} style={selectedLights.findIndex(selected => selected.id === light.id) > -1 ? {...selected} : {}}>
+                    <div className={`lights ${light.type}`}></div>
                 </div>
             ))}
         </div>
