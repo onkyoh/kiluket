@@ -146,11 +146,11 @@ button {
     }
     .bar {
         width: 90%;
-        background-color: black;
+        background-color: rgba(15, 15, 15, 0.9);
         border-radius: 0.5em;
-        overflow: hidden;
         box-shadow: 0px 0px 4px black;
         border: 1px solid black;
+        overflow: hidden;
         div {
             height: 1em;
             background-color: $yellow;
@@ -183,17 +183,20 @@ button {
 .nav {
     position: fixed;
     margin: auto;
-    bottom: 2em;
-    width: 100%;
+    bottom: 1em;
+    left: 50%;
+    translate: -50%;
+    width: calc(min(95%, 300px));
     z-index: 400;
     @include flexCenter();
-    justify-content: space-around;
-    button {
-        z-index: 400;
-        font-size: 2em;
-        height: 1em;
-        width: 1em;
-        @include flexCenter();
+    justify-content: space-between;
+    img {
+        background-color: white;
+        width: 55px;
+        height: 55px;
+        padding: 5px;
+        box-shadow: 0px 0px 8px black;
+        border: 1px solid black;
     }
 }
 
@@ -214,8 +217,10 @@ button {
         justify-content: space-around;
         gap: 1em;
         width: 100%;
+        max-width: 700px;
         padding: 1em;
         padding-top: 3em;
+        margin: auto;
         .lights_container {
             width: 100px;
             height: 100px;

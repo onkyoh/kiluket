@@ -6,6 +6,8 @@ import Inventory from '../navComponents/Inventory'
 import Quests from '../navComponents/Quests'
 import verifyMoved from '../utils/verifyMoved'
 import XpBar from './XpBar'
+import quests from '../icons/quests.png'
+import inventory from '../icons/inventory.png'
 
 interface shadow {
   id: number
@@ -143,8 +145,8 @@ switch (nav) {
                 <XpBar userXp={userXp}/>
                 {popupShown}
                 <div className='nav'>
-                  <button onClick={() => handleNav('inv')}>I</button>
-                  <button onClick={() => handleNav('quests')}>Q</button>
+                  <img onClick={() => handleNav('inv')} src={inventory} alt='inventory'/>
+                  <img onClick={() => handleNav('quests')} src={quests} alt='quests'/>
                 </div>
                 
             </>

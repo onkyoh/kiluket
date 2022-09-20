@@ -134,11 +134,11 @@ button {
 }
 .xp_bar .bar {
   width: 90%;
-  background-color: black;
+  background-color: rgba(15, 15, 15, 0.9);
   border-radius: 0.5em;
-  overflow: hidden;
   box-shadow: 0px 0px 4px black;
   border: 1px solid black;
+  overflow: hidden;
 }
 .xp_bar .bar div {
   height: 1em;
@@ -180,22 +180,23 @@ button {
 .nav {
   position: fixed;
   margin: auto;
-  bottom: 2em;
-  width: 100%;
+  bottom: 1em;
+  left: 50%;
+  translate: -50%;
+  width: min(95%, 300px);
   z-index: 400;
   display: flex;
   justify-content: center;
   align-items: center;
-  justify-content: space-around;
+  justify-content: space-between;
 }
-.nav button {
-  z-index: 400;
-  font-size: 2em;
-  height: 1em;
-  width: 1em;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.nav img {
+  background-color: white;
+  width: 55px;
+  height: 55px;
+  padding: 5px;
+  box-shadow: 0px 0px 8px black;
+  border: 1px solid black;
 }
 
 .nav_directory {
@@ -218,8 +219,10 @@ button {
   justify-content: space-around;
   gap: 1em;
   width: 100%;
+  max-width: 700px;
   padding: 1em;
   padding-top: 3em;
+  margin: auto;
 }
 .inventory .lights_grid .lights_container {
   width: 100px;

@@ -21,11 +21,9 @@ const Inventory = ({setNav, lightStorage, setLightStorage}: IProps) => {
     }
 
     const selected = {
-        boxShadow: `0px 10px 0px -5px #FFFFFF,
-         0px -10px 0px -5px #FFFFFF,
-         10px 0px 0px -5px #FFFFFF,
-         -10px 0px 0px -5px #FFFFFF,
-         0px 0px 0px 5px #FF0000`
+        filter: 'brightness(0)',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        borderRadius: '1em'
     }
 
     const select = (id: string) => {
