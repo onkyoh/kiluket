@@ -25,7 +25,7 @@ const SetCenter = ({updatedLocation, setUpdatedLocation, previousLocation, setPr
 
     const icon = Leaflet.divIcon({
         className: 'icon',
-        iconSize: [50, 50]
+        iconSize: [40, 40]
     })
 
     const setViewOptions = {

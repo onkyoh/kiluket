@@ -44,6 +44,7 @@ const Inventory = ({setNav, lightStorage, setLightStorage}: IProps) => {
         let currentLights = [...lightStorage]
         let newLights = currentLights.filter(light => !selectedLights.includes(light))
         setLightStorage([...newLights])
+        localStorage.setItem('lightStorage', JSON.stringify([...newLights]))
         setSelectedLights([])
         setShowDelete(false)
     }
@@ -55,14 +56,10 @@ const Inventory = ({setNav, lightStorage, setLightStorage}: IProps) => {
         setShowDelete(!showDelete)
     }
 
-    useEffect(() => {
-        console.log(lightStorage)
-    }, [])
-
   return (
     <div className='nav_directory inventory'>
-        <button onClick={backToMap}>Back</button>
-        <button onClick={handleConfirmation} disabled={selectedLights.length < 1 && true}>Delete</button>
+        <button onClick={backToMap} className='leave_button'>Back</button>
+        <button className='delete_button' onClick={handleConfirmation} disabled={selectedLights.length < 1 && true}>Delete</button>
         <div className='lights_grid'>
             {lightStorage.map((light: ILights) => (
                 <div key={light.id} className='lights_container' onClick={() => select(light.id)} style={selectedLights.findIndex(selected => selected.id === light.id) > -1 ? {...selected} : {}}>

@@ -4,6 +4,8 @@ import Leaflet from "leaflet"
 import SetCenter from './SetCenter'
 import Inventory from '../navComponents/Inventory'
 import Quests from '../navComponents/Quests'
+import verifyMoved from '../utils/verifyMoved'
+import XpBar from './XpBar'
 
 interface shadow {
   id: number
@@ -20,9 +22,10 @@ interface IProps {
     setInGame: (inGame: boolean) => void
     lightStorage: ILights[]
     setLightStorage: (lightStorage: ILights[]) => void
+    userXp: number
 }
 
-const MapScreen = ({setInGame, inGame, setLightStorage, lightStorage}: IProps) => {
+const MapScreen = ({setInGame, inGame, setLightStorage, lightStorage, userXp}: IProps) => {
 
   const [updatedLocation, setUpdatedLocation] = useState<[number, number]>([0, 0])
 
@@ -71,9 +74,13 @@ const MapScreen = ({setInGame, inGame, setLightStorage, lightStorage}: IProps) =
     let  location: [number, number] = [position.coords.latitude, position.coords.longitude]
     if (!previousLocation) {
       setPreviousLocation([...location])
+    }  else {
+      const movedEnough = verifyMoved([...previousLocation], [...location])
+      if (movedEnough) {
+        populateShadows([...location])
+      }
     }
     setUpdatedLocation([...location])
-    populateShadows([...location])
 }
 
 const failure = (err: {message: string}) => {
@@ -120,11 +127,10 @@ switch (nav) {
             <>
                 <MapContainer className="map" center={updatedLocation} zoom={19} dragging={false} zoomControl={false} doubleClickZoom={false} attributionControl={false} touchZoom={false} keyboard={false}>
                     <TileLayer
-                        attribution='<a href="http://jawg.io" title="Tiles Courtesy of Jawg Maps" target="_blank">&copy; <b>Jawg</b>Maps</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                        url='https://{s}.tile.jawg.io/jawg-matrix/{z}/{x}/{y}{r}.png?access-token=TEwC0gi2f3HbyX3sTW2LZNx9of0KLaJzin0ad6WCTU5MnKDRzORanl3GSxeTMAzy'
+                        attribution='<a href="https://github.com/cyclosm/cyclosm-cartocss-style/releases" title="CyclOSM - Open Bicycle render">CyclOSM</a> | Map data: &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                        url='https://{s}.tile-cyclosm.openstreetmap.fr/cyclosm/{z}/{x}/{y}.png'
                         maxZoom={19}
                         minZoom={19}
-                        accessToken={'TEwC0gi2f3HbyX3sTW2LZNx9of0KLaJzin0ad6WCTU5MnKDRzORanl3GSxeTMAzy'}
                     />
                     {shadows.length > 0 && shadows.map((shadow: shadow) => (
                         <Marker key={shadow.id} icon={shadowIcon} position={shadow.position} keyboard={false} eventHandlers={{
@@ -134,11 +140,11 @@ switch (nav) {
                     ))}
                     <SetCenter updatedLocation={updatedLocation} setUpdatedLocation={setUpdatedLocation} previousLocation={previousLocation} setPreviousLocation={setPreviousLocation} inGame={inGame}/>
                 </MapContainer>
+                <XpBar userXp={userXp}/>
                 {popupShown}
                 <div className='nav'>
                   <button onClick={() => handleNav('inv')}>I</button>
                   <button onClick={() => handleNav('quests')}>Q</button>
-                  <button>L</button>
                 </div>
                 
             </>

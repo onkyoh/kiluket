@@ -3,6 +3,7 @@
   margin: 0;
   box-sizing: border-box;
   font-size: 18px;
+  font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande", "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
 }
 
 body {
@@ -23,13 +24,21 @@ body {
 
 .icon {
   border-radius: 50%;
-  background-color: black;
-  filter: opacity(0.2) invert(1);
+  background-color: white;
+  box-shadow: 0px 0px 16px 16px rgba(241, 226, 14, 0.5);
+}
+
+button {
+  background-color: white;
+  border: 1px solid black;
+  padding: 0.25em;
+  box-shadow: 0px 0px 4px black;
 }
 
 .shadow {
-  background-color: black;
-  box-shadow: 0px 0px 4px white;
+  background-color: rgba(15, 15, 15, 0.9);
+  box-shadow: 0px 0px 16px 8px rgba(15, 15, 15, 0.9);
+  outline: 1px solid black;
   border-radius: 50%;
 }
 
@@ -43,6 +52,30 @@ body {
   z-index: 1000;
   background-color: white;
   position: relative;
+}
+.play_screen .freed_light {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 0.5em;
+  box-shadow: 0px 0px 100vmax 100vmax rgba(15, 15, 15, 0.8);
+  outline: 1px solid black;
+  position: absolute;
+  padding: 1em;
+  background-color: white;
+  top: 50%;
+  left: 50%;
+  translate: -50% -50%;
+  width: 300px;
+  text-align: center;
+}
+.play_screen .freed_light .light_container {
+  width: 100px;
+  height: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .grid_layout {
@@ -72,8 +105,80 @@ body {
   grid-area: d;
 }
 
-.nav {
+.leave_button {
+  position: fixed;
+  top: 0.5em;
+  left: 0.5em;
+}
+
+.xp_bar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  z-index: 400;
+  position: fixed;
+  left: 50%;
+  translate: -50%;
+  background-color: white;
+  box-shadow: 0px 0px 8px black;
+  border: 1px solid black;
+  top: 1em;
+  width: min(95%, 300px);
+  padding: 0.25em;
+  gap: 0.25em;
+}
+.xp_bar .level {
+  width: 90%;
+  text-align: start;
+}
+.xp_bar .bar {
+  width: 90%;
+  background-color: black;
+  border-radius: 0.5em;
+  overflow: hidden;
+  box-shadow: 0px 0px 4px black;
+  border: 1px solid black;
+}
+.xp_bar .bar div {
+  height: 1em;
+  background-color: rgb(241, 226, 14);
+  position: relative;
+}
+.xp_bar .bar div::after {
+  content: "";
   position: absolute;
+  right: -0.5em;
+  width: 1.1em;
+  height: 100%;
+  background-color: rgb(241, 226, 14);
+  border-radius: 52% 48% 47% 53%/49% 51% 54% 46%;
+  -webkit-animation: spin 2s infinite linear;
+          animation: spin 2s infinite linear;
+}
+@-webkit-keyframes spin {
+  from {
+    rotate: 0deg;
+  }
+  to {
+    rotate: 360deg;
+  }
+}
+@keyframes spin {
+  from {
+    rotate: 0deg;
+  }
+  to {
+    rotate: 360deg;
+  }
+}
+.xp_bar .progress {
+  width: 90%;
+  text-align: end;
+}
+
+.nav {
+  position: fixed;
   margin: auto;
   bottom: 2em;
   width: 100%;
@@ -88,6 +193,9 @@ body {
   font-size: 2em;
   height: 1em;
   width: 1em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .nav_directory {
@@ -99,6 +207,9 @@ body {
   z-index: 401;
 }
 
+.inventory {
+  overflow: auto;
+}
 .inventory .lights_grid {
   display: flex;
   justify-content: center;
@@ -108,6 +219,7 @@ body {
   gap: 1em;
   width: 100%;
   padding: 1em;
+  padding-top: 3em;
 }
 .inventory .lights_grid .lights_container {
   width: 100px;
@@ -116,12 +228,17 @@ body {
   justify-content: center;
   align-items: center;
 }
+.inventory .delete_button {
+  position: fixed;
+  top: 0.5em;
+  right: 0.5em;
+}
 .inventory .delete_modal {
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  border: 1px solid black;
+  border: 2px solid black;
   width: 300px;
   background-color: white;
   position: absolute;
@@ -131,7 +248,7 @@ body {
   text-align: center;
   gap: 1em;
   padding: 1em;
-  box-shadow: 0px 0px 100vmax 100vmax rgba(15, 15, 15, 0.5);
+  box-shadow: 0px 0px 100vmax 100vmax rgba(15, 15, 15, 0.7);
 }
 
 .lights {
@@ -166,9 +283,39 @@ body {
   align-items: center;
   transition: all 0.5s ease-in-out;
 }
-.quests .locked {
-  filter: blur(7.5px);
-  box-shadow: none;
+.quests #info {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  height: 1.2em;
+  width: 1.2em;
+  font-size: 1.5em;
+  font-weight: bold;
+  font-family: "Times New Roman", Times, serif;
+  position: fixed;
+  top: 0.25em;
+  right: 0.25em;
+}
+.quests span {
+  width: 300px;
+}
+.quests dialog {
+  width: min(500px, 95%);
+  margin: auto;
+  padding: 1.5em;
+  box-shadow: 0px 0px 100vmax 100vmax rgba(15, 15, 15, 0.8);
+  border: 2px solid black;
+}
+.quests dialog button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 0.25em;
+  right: 0.25em;
+  width: 1.5em;
+  height: 1.5em;
 }
 
 .three {

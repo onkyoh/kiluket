@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import PlayScreen from './PlayScreen'
 import MapScreen from './MapScreen'
 
@@ -13,11 +13,27 @@ const GameScreen = () => {
 
   const [lightStorage, setLightStorage] = useState<ILights[]>([])
 
+  const [currentUser, setCurrentUser] = useState("")
+
+  const [userXp, setUserXp] = useState(0)
+
+  useEffect(() => {
+    //grab users xp, lightstorage, and quests
+    let currentXp = localStorage.getItem('userXp')
+    if (currentXp) {
+      setUserXp(parseInt(currentXp))
+    }
+    let lightStorage = localStorage.getItem('lightStorage')
+    if (lightStorage) {
+      setLightStorage(JSON.parse(lightStorage))
+    }
+  }, [])
+
   return (
-    <>
-      {inGame && <PlayScreen setInGame={setInGame} setLightStorage={setLightStorage} lightStorage={lightStorage}/>}
-      <MapScreen setInGame={setInGame} inGame={inGame} setLightStorage={setLightStorage} lightStorage={lightStorage}/>
-    </>
+      <>
+        {inGame && <PlayScreen setInGame={setInGame} setLightStorage={setLightStorage} lightStorage={lightStorage} setUserXp={setUserXp} userXp={userXp}/>}
+        <MapScreen setInGame={setInGame} inGame={inGame} setLightStorage={setLightStorage} lightStorage={lightStorage} userXp={userXp}/>
+      </>
   )
 }
 

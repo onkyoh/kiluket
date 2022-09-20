@@ -10,22 +10,24 @@ interface IProps {
     setInGame: (inGame: boolean) => void
     lightStorage: ILights[]
     setLightStorage: (lightStorage: ILights[]) => void
+    userXp: number
+    setUserXp: (xp: number) => void
 }
 
-const PlayScreen = ({setInGame, setLightStorage, lightStorage}: IProps) => {
+const PlayScreen = ({setInGame, setLightStorage, lightStorage, setUserXp, userXp}: IProps) => {
 
-    const leavePlay = () => {
-        setInGame(false)
-    }
+  const leavePlay = () => {
+      setInGame(false)
+  }
 
-    const [userInput, setUserInput] = useState('')
+  const [userInput, setUserInput] = useState('')
 
   const defaultColor = {
     backgroundColor: 'white'
   }
 
   const clickColor = {
-    backgroundColor: 'rgb(26, 238, 72)'
+    backgroundColor: 'green'
   }
 
   const patternColor = {
@@ -38,7 +40,11 @@ const PlayScreen = ({setInGame, setLightStorage, lightStorage}: IProps) => {
 
   const [gamePattern, setGamePattern] = useState<number[]>()
 
-  const [score, setScore] = useState<number>()
+  const [currentType, setCurrentType] = useState('')
+
+  const [freed, setFreed] = useState(false)
+
+  const [xpPlus, setXpPlus] = useState(0)
 
   const leftRef = useRef<HTMLButtonElement>(null!)
   const upRef = useRef<HTMLButtonElement>(null!)
@@ -82,7 +88,6 @@ const PlayScreen = ({setInGame, setLightStorage, lightStorage}: IProps) => {
         clickChange(downRef)
       }
       setUserInput(input)
-    console.log(input)
   }
   
 const keyDownHandler = (e: { keyCode: number }) => {
@@ -126,7 +131,6 @@ const keyDownHandler = (e: { keyCode: number }) => {
   }
 
   const readPattern = (pattern: number[]) => {
-    console.log(pattern)
     pattern.forEach((letter, i) =>  {
       setTimeout(() => {
         switch (letter) {
@@ -169,7 +173,6 @@ const keyDownHandler = (e: { keyCode: number }) => {
       }
     })
     score = parseInt((score / gamePattern.length * 100).toFixed(2))
-    setScore(score)
     return score
   }
 
@@ -183,35 +186,48 @@ const keyDownHandler = (e: { keyCode: number }) => {
     if (score === 0 || !gamePattern) {
       return
     }
+
     const lottery = Math.random() * 50
     const totalRoll = lottery + (score/2)
 
     let color;
+    let colorXp;
 
     if (totalRoll > 30) {
       color = 'green'
+      colorXp = 10
     }
     if (totalRoll > 60) {
       color = 'blue'
+      colorXp = 25
     }
     if (totalRoll > 80) {
       color = 'purple'
+      colorXp = 45
     }
     if (totalRoll > 90 && gamePattern.length > 3) {
       color = 'red'
+      colorXp = 75
     }
     if (totalRoll > 95 && gamePattern.length > 5) {
       color = 'yellow'
+      colorXp = 100
     }
-    if (color) {
+    if (color && colorXp) {
+      //light added here
       const size = getSize(gamePattern.length)
-      const newLight = {type: size + ' ' + color, id: uuidv4()}
+      const type = size + ' ' + color
+      const newLight = {type: type, id: uuidv4()}
+      setCurrentType(type)
+      const xpGain: number = colorXp * gamePattern.length-2
+      setXpPlus(xpGain)
       setLightStorage([...lightStorage, newLight])
+      localStorage.setItem('lightStorage', JSON.stringify([...lightStorage, newLight]))
+      setUserXp(userXp + xpGain)
+      localStorage.setItem('userXp', JSON.stringify(userXp + xpGain))
+      setFreed(true)
     }
-  }
 
-  const gameReady = () => {
-    conductRoll(getScore()!)
   }
 
   const newgame = () => {
@@ -219,14 +235,20 @@ const keyDownHandler = (e: { keyCode: number }) => {
     let pattern = generatePattern()
     setGamePattern([...pattern])
     readPattern(pattern)
-    setScore(0)
   }
 
   useEffect(() => {
     if (userInput) {
-      gameReady()
+      conductRoll(getScore()!)
+      //runs if input was detected after play period
+    }
+    if (!isPlaying && gamePattern && !userInput) {
+      leavePlay()
+      //runs if no input was detected after play period
     }
   }, [isPlaying])
+
+
 
 useEffect(() => {
   if (isPlaying) {
@@ -243,9 +265,10 @@ useEffect(() => {
     }, 1000)
   }, [])
 
+  //need to pause and give instructions if xp = 0, compeltedLights = [], and lightStorage = []
+
   return (
     <div className='play_screen'>
-        <button onClick={leavePlay}>Leave</button>
         <div className='grid_layout'>
             <button id='up' ref={upRef} style={defaultColor} onClick={() => moveCenter('up')}></button>
             <button id='left' ref={leftRef} style={defaultColor} onClick={() => moveCenter('left')}></button>
@@ -253,10 +276,15 @@ useEffect(() => {
             <button id='down' ref={downRef} style={defaultColor} onClick={() => moveCenter('down')}></button>
         </div>
         {userInput && !isPlaying &&
-        <div>
-          <p>You freed a light!</p>
-          <button onClick={leavePlay}>Continue</button>
-        </div>
+          <div className='freed_light'>
+            {freed ? <p>You freed a light! <br /><span>+ {xpPlus}xp</span></p> : <p>You failed in freeing the light.</p>}
+            {freed && 
+              <div className='light_container'>
+                <div className={`lights ${currentType}`}></div>
+              </div>
+            }
+            <button onClick={leavePlay}>Continue</button>
+          </div>
         }
     </div>
   )

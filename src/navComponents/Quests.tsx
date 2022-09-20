@@ -44,63 +44,91 @@ const Quests = ({setNav, lightStorage, setLightStorage}: IProps) => {
       backgroundColor: 'rgba(0, 0, 0, 0.5)',
     }
 
-    const [handingIn, setHandingIn] = useState(false)
-
     const [error, setError] = useState('')
 
-    const toggleHandingIn = () => {
-      setHandingIn(!handingIn)
-    }
-
-    const handInLight = (sizeIdx: number, colorIdx: number) => {
-      const idx = 5 * sizeIdx + colorIdx
-      if (completedLights[idx] || completedLights.indexOf(false) < sizeIdx*5 || !handingIn) {
-        // disables click if light handed in or if there is an incomplete light in the row before
-        return
-      }
-      const type = sizes[sizeIdx] + ' ' + colors[colorIdx]
-      const storageIdx = lightStorage.findIndex(light => light.type === type)
-      if (storageIdx > -1) {
-        //removing light from light storage
-        let tempStorage = [...lightStorage]
-        tempStorage.splice(storageIdx, 1)
-        setLightStorage([...tempStorage])
-        //adding light to completed lights
-        let tempCompleted = [...completedLights]
-        tempCompleted[idx] = true
-        setCompletedLights([...tempCompleted])
-      } else {
-        setError('You have not caught that light yet.')
-        return
-      }
-      setError('')
-    }
-
     const errorText = {
+      textAlign: 'center' as const, 
       color: 'red',
     }
 
     const completedText = {
+      textAlign: 'center' as const,
       color: 'black',
     }
 
-    const questComplete = 'Congragulations you have freed every light and completed your quest!'
+    const questComplete = 'Congratulations you have freed every light and completed your quest!'
+
+    const [showInfo, setShowInfo] = useState(false)
+
+    const toggleQuestInfo = () => {
+      setShowInfo(!showInfo)
+    }
+
+    const handIn = () => {
+      let tempCompleted = [...completedLights]
+      let tempStorage = [...lightStorage]
+      let colorIdx = 0
+      let sizeIdx = 0
+      let arraysChanged = false
+      tempCompleted.forEach((completed, i) => {
+
+
+        const type = sizes[sizeIdx] + ' ' + colors[colorIdx]
+   
+        const storageIdx = lightStorage.findIndex(light => light.type === type)
+        if (storageIdx > -1 && !completed) {
+          tempStorage.splice(storageIdx, 1)
+          tempCompleted[i] = true
+          arraysChanged = true
+        }
+
+        colorIdx += 1
+        if (colorIdx === 5) {
+          colorIdx = 0
+          sizeIdx += 1
+        }
+      }) 
+      if (arraysChanged) {
+        setCompletedLights([...tempCompleted])
+        localStorage.setItem('completedLights', JSON.stringify([...tempCompleted]))
+        setLightStorage([...tempStorage])
+        localStorage.setItem('lightStorage', JSON.stringify([...tempStorage]))
+      } else {
+        setError('You do not currently have unique lights to hand in.')
+      }
+    }
+
+    useEffect(() => {
+      let currentCompleted = localStorage.getItem('completedLights')
+      if (currentCompleted) {
+        setCompletedLights(JSON.parse(currentCompleted))
+      }
+    }, [])
 
   return (
     <div className='nav_directory quests'>
-        <button onClick={toggleHandingIn}>Begin Handing In</button>
-        <button onClick={backToMap}>Back</button>
-        <span style={completedLights.indexOf(false) < 0 ? {textAlign: 'center', ...completedText} : {textAlign: 'center', ...errorText}}>{completedLights.indexOf(false) < 0 ? questComplete : error}</span>
+        <button onClick={backToMap} className='leave_button'>Back</button>
+        <button onClick={toggleQuestInfo} id='info'>i</button>
+        <button onClick={handIn}>Hand In</button>
+        <span style={completedLights.indexOf(false) < 0 ? {...completedText} : {...errorText}}>{completedLights.indexOf(false) < 0 ? questComplete : error}</span>
         {sizes.map((size, sizeIdx: number) => (
-          <div className={completedLights.indexOf(false) > sizeIdx*5-1 || completedLights.indexOf(false) < 0 ? 'size_container' : 'size_container locked'} 
-          style={completedLights.indexOf(false) > sizeIdx*5+4 || completedLights.indexOf(false) < 0 ? {...finished} : {...unfinished}}>
+          <div  key={sizeIdx} className='size_container' style={completedLights.indexOf(false) > sizeIdx*5+4 || completedLights.indexOf(false) < 0 ? {...finished} : {...unfinished}}>
           {colors.map((color, colorIdx: number) => (
-            <div className='color_container'  onClick={() => handInLight(sizeIdx, colorIdx)} style={completedLights[5*sizeIdx+colorIdx] ? {} : {...incomplete}}>
+            <div className='color_container' key={colorIdx} style={completedLights[5*sizeIdx+colorIdx] ? {} : {...incomplete}}>
               <div className={`lights ${colors[colorIdx]} ${sizes[sizeIdx]}`}></div>
             </div>
           ))}
           </div>
         ))}
+        {showInfo && 
+        <dialog open>
+          <button onClick={toggleQuestInfo}>x</button>
+          <p>
+            As the 'Kiluket' it is your task to free lights strangled by the shadows and let them shine freely.
+            Upon freeing a unique type of light hand it in. Once all types have been freed you will have completed your quest.
+          </p>
+        </dialog>
+        }
     </div>
   )
 }
