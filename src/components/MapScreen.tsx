@@ -66,10 +66,6 @@ const MapScreen = ({setInGame, inGame, setLightStorage, lightStorage, userXp}: I
     setShadows([...tempShadows])
   }
 
-  useEffect(() => {
-      populateShadows([...updatedLocation])
-  }, [previousLocation])
-
   const shadowClicked = () => {
     setInGame(true)
   }
@@ -78,11 +74,9 @@ const MapScreen = ({setInGame, inGame, setLightStorage, lightStorage, userXp}: I
     if (!gettingLocation) {
       return
     }
+    //should not work after initial one
     let  location: [number, number] = [position.coords.latitude, position.coords.longitude] 
-    const movedEnough = verifyMoved([...previousLocation], [...location])
-      if (movedEnough) {
-        setPreviousLocation([...location])
-      }
+    setPreviousLocation([...location])
     setUpdatedLocation([...location])
 }
 
@@ -93,6 +87,10 @@ const failure = (err: {message: string}) => {
 useEffect(() => {
   navigator.geolocation.getCurrentPosition(success, failure)
 }, [])
+
+useEffect(() => {
+  populateShadows([...updatedLocation])
+}, [previousLocation])
 
 useEffect(() => {
     if (updatedLocation[0] !== 0) {

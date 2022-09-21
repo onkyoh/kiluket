@@ -53,7 +53,8 @@ button {
     padding: 0.25em;
     box-shadow: 0px 0px 4px black;
     cursor: pointer;
-    user-select: none;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+    -webkit-tap-highlight-color: transparent;
 }
 
 .shadow {
