@@ -75,19 +75,15 @@ const MapScreen = ({setInGame, inGame, setLightStorage, lightStorage, userXp}: I
   }
 
   const success = (position: { coords: { latitude: number; longitude: number } }) => {
+    if (!gettingLocation) {
+      return
+    }
     let  location: [number, number] = [position.coords.latitude, position.coords.longitude] 
-    if (location[0] === updatedLocation[0] && location[1] === updatedLocation[1]) {
-      return
-    }
-    if (updatedLocation[0] === 0 && updatedLocation[1] === 0) {
-      return
-    }
     const movedEnough = verifyMoved([...previousLocation], [...location])
       if (movedEnough) {
         setPreviousLocation([...location])
       }
     setUpdatedLocation([...location])
-
 }
 
 const failure = (err: {message: string}) => {
