@@ -1,5 +1,5 @@
 import Leaflet from "leaflet"
-import { useEffect } from "react"
+import { useState } from "react"
 import { useMap, Marker } from "react-leaflet"
 import verifyMoved from '../utils/verifyMoved'
 
@@ -33,15 +33,20 @@ const SetCenter = ({updatedLocation, setUpdatedLocation, previousLocation, setPr
         duration: 0.1
     }
 
+    const [delay, setDelay] = useState(false)
+
     const success = (position: IPosition) => {
         let location: [number, number] = [position.coords.latitude, position.coords.longitude]
+        if (delay) {
+            setTimeout(() => {
+                setDelay(false)
+            }, 5000)
+            return
+        }
         if (location[0] === updatedLocation[0] && location[1] === updatedLocation[1]) {
             return
         }
         if (updatedLocation[0] === 0 || updatedLocation[1] === 0) {
-            return
-        }
-        if (previousLocation[0] === 0) {
             return
         }
         const movedEnough = verifyMoved([...previousLocation], [...location])
@@ -50,6 +55,7 @@ const SetCenter = ({updatedLocation, setUpdatedLocation, previousLocation, setPr
         }
         setUpdatedLocation([...location])
         map.setView(location, 19, setViewOptions)
+        setDelay(true)
     }
 
     const error = (error: {message: string}) => {
