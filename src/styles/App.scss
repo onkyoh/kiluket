@@ -52,7 +52,6 @@ button {
     border: 1px solid black;
     padding: 0.25em;
     box-shadow: 0px 0px 4px black;
-    cursor: pointer;
 }
 
 .shadow {
@@ -127,7 +126,6 @@ button {
         height: 100px;
         border-radius: 50%;
         transition: all 0.3s;
-        cursor: default !important;
         -webkit-tap-highlight-color: rgba(0,0,0,0);
         -webkit-tap-highlight-color: transparent;
         &:nth-of-type(1) {

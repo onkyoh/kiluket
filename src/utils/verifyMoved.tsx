@@ -1,7 +1,6 @@
 
 const verifyMoved = (previous: [number, number], current: [number, number]) => {
     let verification = false
-    console.log(previous, 'vs', current)
     //difference between current and previous location
     let xChange = previous[1] - current[1]
     let yChange = previous[0] - current[0]

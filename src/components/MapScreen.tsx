@@ -71,8 +71,10 @@ const MapScreen = ({setInGame, inGame, setLightStorage, lightStorage, userXp}: I
   }
 
   const success = (position: { coords: { latitude: number; longitude: number } }) => {
-
     let  location: [number, number] = [position.coords.latitude, position.coords.longitude] 
+    if (location[0] === updatedLocation[0]) {
+      return
+    }
     setUpdatedLocation([...location])
     const movedEnough = verifyMoved([...previousLocation], [...location])
     if (movedEnough) {
@@ -85,9 +87,9 @@ const failure = (err: {message: string}) => {
   console.log(err.message)
 }
 
-useEffect(() => {
-  navigator.geolocation.getCurrentPosition(success, failure)
-}, [])
+navigator.geolocation.watchPosition(success, failure, {
+      enableHighAccuracy: true
+  });
 
 useEffect(() => {
     if (updatedLocation[0] !== 0 && gettingLocation) {
@@ -138,7 +140,7 @@ switch (nav) {
                         }}>
                         </Marker>
                     ))}
-                    <SetCenter updatedLocation={updatedLocation} setUpdatedLocation={setUpdatedLocation} previousLocation={previousLocation} setPreviousLocation={setPreviousLocation}/>
+                    <SetCenter updatedLocation={updatedLocation}/>
                 </MapContainer>
                 <XpBar userXp={userXp}/>
                 {popupShown}
