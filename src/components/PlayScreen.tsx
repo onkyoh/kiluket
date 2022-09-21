@@ -1,4 +1,7 @@
 import React, {useState, useEffect, useRef} from 'react'
+import eyes from '../icons/eyes.png'
+import tap from '../icons/tap.png'
+
 const { v4: uuidv4 } = require('uuid');
 
 interface ILights {
@@ -23,15 +26,21 @@ const PlayScreen = ({setInGame, setLightStorage, lightStorage, setUserXp, userXp
   const [userInput, setUserInput] = useState('')
 
   const defaultColor = {
-    backgroundColor: 'white'
+    border: '1px solid white',
+    backgroundColor: 'white',
+    boxShadow: 'inset 0px 0px 8px 2px rgba(15,15,15,0.5)'
   }
 
   const clickColor = {
-    backgroundColor: 'green'
+    border: '1px solid rgb(241, 226, 14)',
+    backgroundColor: 'rgba(241, 226, 14, 0.3)',
+    boxShadow: '0px 0px 16px 16px rgba(241, 226, 14, 0.5)'
   }
 
   const patternColor = {
-    backgroundColor: 'yellow'
+    border: '1px solid rgba(15, 15, 15, 1)',
+    backgroundColor: 'rgba(15, 15, 15, 0.9)',
+    boxShadow: '0px 0px 16px 8px rgba(15, 15, 15, 0.9)'
   }
 
   const currentDifficulty = 300
@@ -42,9 +51,11 @@ const PlayScreen = ({setInGame, setLightStorage, lightStorage, setUserXp, userXp
 
   const [currentType, setCurrentType] = useState('')
 
-  const [freed, setFreed] = useState(false)
+  const [freed, setFreed] = useState<boolean>(false)
 
   const [xpPlus, setXpPlus] = useState(0)
+
+  const [madeIt, setMadeIt] = useState(false)
 
   const leftRef = useRef<HTMLButtonElement>(null!)
   const upRef = useRef<HTMLButtonElement>(null!)
@@ -52,21 +63,27 @@ const PlayScreen = ({setInGame, setLightStorage, lightStorage, setUserXp, userXp
   const downRef = useRef<HTMLButtonElement>(null!)
 
   const clickChange = (ref: React.RefObject<HTMLButtonElement>) => {
-    let current = ref.current!
+    let current = ref.current! as HTMLButtonElement
     //color shown depends on if users input or not
     if (!isPlaying) {
+      current.style.border = patternColor.border
       current.style.backgroundColor = patternColor.backgroundColor
+      current.style.boxShadow = patternColor.boxShadow
     }
     else {
+      current.style.border = clickColor.border
       current.style.backgroundColor = clickColor.backgroundColor
+      current.style.boxShadow = clickColor.boxShadow
     } 
    
     setTimeout(() => {
+      current.style.border = defaultColor.border
       current.style.backgroundColor = defaultColor.backgroundColor
+      current.style.boxShadow = defaultColor.boxShadow
     }, currentDifficulty)
   }
 
-  const moveCenter = (direction: string) => {
+  const clickButton = (direction: string) => {
     if (!isPlaying || gamePattern?.length === userInput.length) {
       return
     }
@@ -92,10 +109,10 @@ const PlayScreen = ({setInGame, setLightStorage, lightStorage, setUserXp, userXp
   
 const keyDownHandler = (e: { keyCode: number }) => {
     switch (e.keyCode) {
-      case 37: moveCenter('left'); break;
-      case 38: moveCenter('up'); break;
-      case 39: moveCenter('right'); break;
-      case 40: moveCenter('down'); break;
+      case 37: clickButton('left'); break;
+      case 38: clickButton('up'); break;
+      case 39: clickButton('right'); break;
+      case 40: clickButton('down'); break;
     default: return;
     }
   };
@@ -183,6 +200,7 @@ const keyDownHandler = (e: { keyCode: number }) => {
   }
 
   const conductRoll = (score: number) => {
+    setMadeIt(true)
     if (score === 0 || !gamePattern) {
       return
     }
@@ -205,11 +223,11 @@ const keyDownHandler = (e: { keyCode: number }) => {
       color = 'purple'
       colorXp = 45
     }
-    if (totalRoll > 90 && gamePattern.length > 3) {
+    if (totalRoll > 90) {
       color = 'red'
       colorXp = 75
     }
-    if (totalRoll > 95 && gamePattern.length > 5) {
+    if (totalRoll > 95) {
       color = 'yellow'
       colorXp = 100
     }
@@ -260,32 +278,46 @@ useEffect(() => {
   }, [keyDownHandler]);
 
   useEffect(() => {
+    // starts pattern generation second after load
     setTimeout(() => {
       newgame()
     }, 1000)
   }, [])
 
-  //need to pause and give instructions if xp = 0, compeltedLights = [], and lightStorage = []
 
   return (
     <div className='play_screen'>
-        <div className='grid_layout'>
-            <button id='up' ref={upRef} style={defaultColor} onClick={() => moveCenter('up')}></button>
-            <button id='left' ref={leftRef} style={defaultColor} onClick={() => moveCenter('left')}></button>
-            <button id='right' ref={rightRef} style={defaultColor} onClick={() => moveCenter('right')}></button>
-            <button id='down' ref={downRef} style={defaultColor} onClick={() => moveCenter('down')}></button>
-        </div>
-        {userInput && !isPlaying &&
-          <div className='freed_light'>
-            {freed ? <p>You freed a light! <br /><span>+ {xpPlus}xp</span></p> : <p>You failed in freeing the light.</p>}
-            {freed && 
-              <div className='light_container'>
-                <div className={`lights ${currentType}`}></div>
-              </div>
-            }
-            <button onClick={leavePlay}>Continue</button>
+      <div className='play_room'>
+        {!isPlaying && !madeIt ? 
+          <div className='play_instructions'>
+            <p>Memorize the shadows movements.</p>
+            <img src={eyes} alt="eyes" />
           </div>
+          :
+          <div className='play_instructions'>
+            <p>Repeat the shadows movements.</p>
+            <img src={tap} alt="tap" />
+          </div>
+         
         }
+        <div className='grid_layout'>
+            <button id='up' ref={upRef} style={defaultColor} onClick={() => clickButton('up')}></button>
+            <button id='left' ref={leftRef} style={defaultColor} onClick={() => clickButton('left')}></button>
+            <button id='right' ref={rightRef} style={defaultColor} onClick={() => clickButton('right')}></button>
+            <button id='down' ref={downRef} style={defaultColor} onClick={() => clickButton('down')}></button>
+        </div>
+      </div>
+      {userInput && !isPlaying &&
+        <div className='freed_light'>
+          {freed ? <p>You freed a light! <br /><span>+ {xpPlus}xp</span></p> : <p>You failed in freeing the light.</p>}
+          {freed && 
+            <div className='light_container'>
+              <div className={`lights ${currentType}`}></div>
+            </div>
+          }
+          <button onClick={leavePlay}>Continue</button>
+        </div>
+      }
     </div>
   )
 }

@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react'
 import PlayScreen from './PlayScreen'
 import MapScreen from './MapScreen'
+import Story from '../storyComponents/Story'
 
 interface ILights {
   type: string
@@ -12,8 +13,6 @@ const GameScreen = () => {
   const [inGame, setInGame] = useState(false)
 
   const [lightStorage, setLightStorage] = useState<ILights[]>([])
-
-  const [currentUser, setCurrentUser] = useState("")
 
   const [userXp, setUserXp] = useState(0)
 
@@ -29,10 +28,17 @@ const GameScreen = () => {
     }
   }, [])
 
+
   return (
       <>
-        {inGame && <PlayScreen setInGame={setInGame} setLightStorage={setLightStorage} lightStorage={lightStorage} setUserXp={setUserXp} userXp={userXp}/>}
-        <MapScreen setInGame={setInGame} inGame={inGame} setLightStorage={setLightStorage} lightStorage={lightStorage} userXp={userXp}/>
+        {userXp === 0 ?
+          <Story setUserXp={setUserXp}/>
+        :
+          <>
+            {inGame && <PlayScreen setInGame={setInGame} setLightStorage={setLightStorage} lightStorage={lightStorage} setUserXp={setUserXp} userXp={userXp}/>}
+            <MapScreen setInGame={setInGame} inGame={inGame} setLightStorage={setLightStorage} lightStorage={lightStorage} userXp={userXp}/>
+          </>
+        } 
       </>
   )
 }

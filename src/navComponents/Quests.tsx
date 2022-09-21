@@ -70,8 +70,8 @@ const Quests = ({setNav, lightStorage, setLightStorage}: IProps) => {
       let colorIdx = 0
       let sizeIdx = 0
       let arraysChanged = false
-      tempCompleted.forEach((completed, i) => {
 
+      tempCompleted.forEach((completed, i) => {
 
         const type = sizes[sizeIdx] + ' ' + colors[colorIdx]
    
@@ -112,7 +112,8 @@ const Quests = ({setNav, lightStorage, setLightStorage}: IProps) => {
         <button onClick={handIn}>Hand In</button>
         <span style={completedLights.indexOf(false) < 0 ? {...completedText} : {...errorText}}>{completedLights.indexOf(false) < 0 ? questComplete : error}</span>
         {sizes.map((size, sizeIdx: number) => (
-          <div  key={sizeIdx} className='size_container' style={completedLights.indexOf(false) > sizeIdx*5+4 || completedLights.indexOf(false) < 0 ? {...finished} : {...unfinished}}>
+          <div  key={sizeIdx} className='size_container' style={completedLights[sizeIdx*5+0] && completedLights[sizeIdx*5+1]
+           && completedLights[sizeIdx*5+2] && completedLights[sizeIdx*5+3] && completedLights[sizeIdx*5+4] ? {...finished} : {...unfinished}}>
           {colors.map((color, colorIdx: number) => (
             <div className='color_container' key={colorIdx} style={completedLights[5*sizeIdx+colorIdx] ? {} : {...incomplete}}>
               <div className={`lights ${colors[colorIdx]} ${sizes[sizeIdx]}`}></div>
@@ -122,11 +123,11 @@ const Quests = ({setNav, lightStorage, setLightStorage}: IProps) => {
         ))}
         {showInfo && 
         <dialog open>
-          <button onClick={toggleQuestInfo}>x</button>
           <p>
             As the 'Kiluket' it is your task to free lights strangled by the shadows and let them shine freely.
-            Upon freeing a unique type of light hand it in. Once all types have been freed you will have completed your quest.
+            Upon freeing a unique type of light, hand it in. Once all types have been freed you will have completed your quest.
           </p>
+          <button onClick={toggleQuestInfo}>Understood!</button>
         </dialog>
         }
     </div>

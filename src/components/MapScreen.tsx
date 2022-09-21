@@ -31,9 +31,11 @@ const MapScreen = ({setInGame, inGame, setLightStorage, lightStorage, userXp}: I
 
   const [updatedLocation, setUpdatedLocation] = useState<[number, number]>([0, 0])
 
-  const [previousLocation, setPreviousLocation] = useState<[number, number]>()
+  const [previousLocation, setPreviousLocation] = useState<[number, number]>([0, 0])
   
-  const [shadows, setShadows] = useState<any[]>([])
+  const [shadows, setShadows] = useState<shadow[]>([])
+
+  const [gettingLocation, setGettingLocation] = useState(true)
 
   const shadowIcon = Leaflet.divIcon({
     className: 'shadow',
@@ -68,21 +70,19 @@ const MapScreen = ({setInGame, inGame, setLightStorage, lightStorage, userXp}: I
       populateShadows([...updatedLocation])
   }, [previousLocation])
 
-  const shadowClicked = (id: number) => {
+  const shadowClicked = () => {
     setInGame(true)
   }
 
   const success = (position: { coords: { latitude: number; longitude: number } }) => {
-    let  location: [number, number] = [position.coords.latitude, position.coords.longitude]
-    if (!previousLocation) {
-      setPreviousLocation([...location])
-    }  else {
+    if (updatedLocation[0] === 0 && updatedLocation[1] === 0) {
+      let  location: [number, number] = [position.coords.latitude, position.coords.longitude]
       const movedEnough = verifyMoved([...previousLocation], [...location])
       if (movedEnough) {
-        populateShadows([...location])
+        setPreviousLocation([...location])
       }
+      setUpdatedLocation([...location])
     }
-    setUpdatedLocation([...location])
 }
 
 const failure = (err: {message: string}) => {
@@ -94,7 +94,9 @@ useEffect(() => {
 }, [])
 
 useEffect(() => {
-    console.log(updatedLocation)
+    if (updatedLocation[0] !== 0) {
+      setGettingLocation(false)
+    }
 }, [updatedLocation])
 
 useEffect(() => {
@@ -125,7 +127,7 @@ switch (nav) {
 
   return (
     <>
-        {updatedLocation[0] !== 0 ?
+        {!gettingLocation ?
             <>
                 <MapContainer className="map" center={updatedLocation} zoom={19} dragging={false} zoomControl={false} doubleClickZoom={false} attributionControl={false} touchZoom={false} keyboard={false}>
                     <TileLayer
@@ -136,11 +138,11 @@ switch (nav) {
                     />
                     {shadows.length > 0 && shadows.map((shadow: shadow) => (
                         <Marker key={shadow.id} icon={shadowIcon} position={shadow.position} keyboard={false} eventHandlers={{
-                        click: () => shadowClicked(shadow.id),
+                        click: () => shadowClicked(),
                         }}>
                         </Marker>
                     ))}
-                    <SetCenter updatedLocation={updatedLocation} setUpdatedLocation={setUpdatedLocation} previousLocation={previousLocation} setPreviousLocation={setPreviousLocation} inGame={inGame}/>
+                    <SetCenter updatedLocation={updatedLocation} setUpdatedLocation={setUpdatedLocation} previousLocation={previousLocation} setPreviousLocation={setPreviousLocation}/>
                 </MapContainer>
                 <XpBar userXp={userXp}/>
                 {popupShown}
@@ -151,7 +153,23 @@ switch (nav) {
                 
             </>
             :
-            <div>...getting location</div>
+            <div className='searching'>
+              <span>...searching</span>
+              <div id='compass'>
+                <div id='dial'>
+                  <div id='markings'>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                  </div>
+                  <div id='needle'>
+                    <span></span>
+                    <span></span>
+                  </div>
+                </div>
+              </div>
+            </div>
         }
     </>
   )

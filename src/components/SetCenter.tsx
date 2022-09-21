@@ -7,9 +7,8 @@ import verifyMoved from '../utils/verifyMoved'
 interface IProps {
     updatedLocation: [number, number]
     setUpdatedLocation: (coords: [number, number]) => void
-    previousLocation: [number, number] | undefined
+    previousLocation: [number, number]
     setPreviousLocation: (coords: [number, number]) => void
-    inGame: boolean
 }
 
 interface IPosition {
@@ -19,7 +18,7 @@ interface IPosition {
     }
 }
 
-const SetCenter = ({updatedLocation, setUpdatedLocation, previousLocation, setPreviousLocation, inGame}: IProps) => {
+const SetCenter = ({updatedLocation, setUpdatedLocation, previousLocation, setPreviousLocation}: IProps) => {
     const map = useMap()
     const markerLocation = updatedLocation
 
@@ -36,20 +35,12 @@ const SetCenter = ({updatedLocation, setUpdatedLocation, previousLocation, setPr
 
     const success = (position: IPosition) => {
         let  location: [number, number] = [position.coords.latitude, position.coords.longitude]
-        if (location[0] === updatedLocation[0] && location[1] === updatedLocation[1]) {
-            return
+        const movedEnough = verifyMoved([...previousLocation], [...location])
+        if (movedEnough) {
+          setPreviousLocation([...location])
         }
-        if (updatedLocation[0] === 0 && updatedLocation[1] === 0) {
-            return
-        }
-        if (previousLocation) {
-            const newPrevious = verifyMoved([...previousLocation], [...location])
-            if (newPrevious) {
-             setPreviousLocation([...location])
-            }
-        }
-       map.setView(location, 19, setViewOptions)
-       setUpdatedLocation([...location])
+        setUpdatedLocation([...location])
+        map.setView(location, 19, setViewOptions)
     }
 
     const error = (error: {message: string}) => {
