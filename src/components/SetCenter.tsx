@@ -34,7 +34,13 @@ const SetCenter = ({updatedLocation, setUpdatedLocation, previousLocation, setPr
     }
 
     const success = (position: IPosition) => {
-        let  location: [number, number] = [position.coords.latitude, position.coords.longitude]
+        let location: [number, number] = [position.coords.latitude, position.coords.longitude]
+        if (location[0] === updatedLocation[0] && location[1] === updatedLocation[1]) {
+            return
+        }
+        if (updatedLocation[0] === 0 && updatedLocation[1] === 0) {
+            return
+        }
         const movedEnough = verifyMoved([...previousLocation], [...location])
         if (movedEnough) {
           setPreviousLocation([...location])
@@ -56,52 +62,6 @@ const SetCenter = ({updatedLocation, setUpdatedLocation, previousLocation, setPr
     navigator.geolocation.watchPosition(success, error, {
         enableHighAccuracy: true
     });
-
-    //so we can simulate travelling with keyclick
-
-    // const moveCenter = (direction: string) => {
-    //     let location: [number, number] = [...updatedLocation]
-    //       if (direction === 'left') {
-    //         location[1] -= 0.0002
-    //       }
-    //       if (direction === 'up') {
-    //         location[0] += 0.0002
-    //       }
-    //       if (direction === 'right') {
-    //         location[1] += 0.0002
-    //       } 
-    //       if (direction === 'down') {
-    //         location[0] -= 0.0002
-    //       }
-    //       const position: IPosition = {
-    //           coords: {
-    //               latitude: location[0],
-    //               longitude: location[1]
-    //           }
-    //       }
-    //       success(position)
-    //   }
-      
-    // const keyDownHandler = (e: { keyCode: number }) => {
-    //     switch (e.keyCode) {
-    //       case 37: moveCenter('left'); break;
-    //       case 38: moveCenter('up'); break;
-    //       case 39: moveCenter('right'); break;
-    //       case 40: moveCenter('down'); break;
-    //     default: return;
-    //     }
-    //   };
-    
-      
-    // useEffect(() => {
-    //   if (!inGame) {
-    //     window.addEventListener('keydown', keyDownHandler);
-    //     return () => {
-    //       window.removeEventListener('keydown', keyDownHandler);
-    //     };
-    //   }
-   
-    //   }, [updatedLocation, inGame]);
 
     return (
         <Marker icon={icon} position={markerLocation} keyboard={false}/>
