@@ -71,13 +71,14 @@ const MapScreen = ({setInGame, inGame, setLightStorage, lightStorage, userXp}: I
   }
 
   const success = (position: { coords: { latitude: number; longitude: number } }) => {
-    if (!gettingLocation) {
-      return
-    }
-    //should not work after initial one
+
     let  location: [number, number] = [position.coords.latitude, position.coords.longitude] 
-    setPreviousLocation([...location])
     setUpdatedLocation([...location])
+    const movedEnough = verifyMoved([...previousLocation], [...location])
+    if (movedEnough) {
+      setPreviousLocation([...location])
+      populateShadows([...location])
+    }
 }
 
 const failure = (err: {message: string}) => {
@@ -89,11 +90,7 @@ useEffect(() => {
 }, [])
 
 useEffect(() => {
-  populateShadows([...updatedLocation])
-}, [previousLocation])
-
-useEffect(() => {
-    if (updatedLocation[0] !== 0) {
+    if (updatedLocation[0] !== 0 && gettingLocation) {
       setGettingLocation(false)
     }
 }, [updatedLocation])

@@ -1,5 +1,5 @@
 import Leaflet from "leaflet"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useMap, Marker } from "react-leaflet"
 import verifyMoved from '../utils/verifyMoved'
 
@@ -33,41 +33,40 @@ const SetCenter = ({updatedLocation, setUpdatedLocation, previousLocation, setPr
         duration: 0.1
     }
 
-    const [delay, setDelay] = useState(false)
+    useEffect(() => {
+        map.setView(updatedLocation, 19, setViewOptions)
+    }, [updatedLocation])
 
-    const success = (position: IPosition) => {
-        let location: [number, number] = [position.coords.latitude, position.coords.longitude]
-        if (delay) {
-            setTimeout(() => {
-                setDelay(false)
-            }, 5000)
-            return
-        }
-        if (location[0] === updatedLocation[0] && location[1] === updatedLocation[1]) {
-            return
-        }
-        if (updatedLocation[0] === 0 || updatedLocation[1] === 0) {
-            return
-        }
-        const movedEnough = verifyMoved([...previousLocation], [...location])
-        if (movedEnough) {
-          setPreviousLocation([...location])
-        }
-        setUpdatedLocation([...location])
-        map.setView(location, 19, setViewOptions)
-        setDelay(true)
-    }
+    // const [delay, setDelay] = useState(false)
 
-    const error = (error: {message: string}) => {
-        console.log(error.message)
-    }
+    // const success = (position: IPosition) => {
+    //     let location: [number, number] = [position.coords.latitude, position.coords.longitude]
 
-    navigator.geolocation.watchPosition(success, error, {
-        enableHighAccuracy: true
-    });
+    //     if (location[0] === updatedLocation[0] && location[1] === updatedLocation[1]) {
+    //         return
+    //     }
+    //     if (updatedLocation[0] === 0 || updatedLocation[1] === 0) {
+    //         return
+    //     }
+    //     const movedEnough = verifyMoved([...previousLocation], [...location])
+    //     if (movedEnough) {
+    //       setPreviousLocation([...location])
+    //     }
+    //     setUpdatedLocation([...location])
+    //     map.setView(location, 19, setViewOptions)
+    //     setDelay(true)
+    // }
+
+    // const error = (error: {message: string}) => {
+    //     console.log(error.message)
+    // }
+
+    // navigator.geolocation.watchPosition(success, error, {
+    //     enableHighAccuracy: true
+    // });
 
     return (
-        <Marker icon={icon} position={markerLocation} keyboard={false}/>
+        <Marker icon={icon} position={updatedLocation} keyboard={false}/>
     )
 }
 
