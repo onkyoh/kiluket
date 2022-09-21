@@ -4,7 +4,6 @@ import Leaflet from "leaflet"
 import SetCenter from './SetCenter'
 import Inventory from '../navComponents/Inventory'
 import Quests from '../navComponents/Quests'
-import verifyMoved from '../utils/verifyMoved'
 import XpBar from './XpBar'
 import quests from '../icons/quests.png'
 import inventory from '../icons/inventory.png'
@@ -30,12 +29,12 @@ interface IProps {
 const MapScreen = ({setInGame, inGame, setLightStorage, lightStorage, userXp}: IProps) => {
 
   const [updatedLocation, setUpdatedLocation] = useState<[number, number]>([0, 0])
-
-  const [previousLocation, setPreviousLocation] = useState<[number, number]>([0, 0])
   
   const [shadows, setShadows] = useState<shadow[]>([])
 
   const [gettingLocation, setGettingLocation] = useState(true)
+
+  const [justMoved, setJustMoved] = useState(false)
 
   const shadowIcon = Leaflet.divIcon({
     className: 'shadow',
@@ -70,16 +69,23 @@ const MapScreen = ({setInGame, inGame, setLightStorage, lightStorage, userXp}: I
     setInGame(true)
   }
 
+  useEffect(() => {
+    if (justMoved) {
+      setTimeout(() => {
+        setJustMoved(false)
+      }, 5000)
+    }
+  }, [justMoved])
+
   const success = (position: { coords: { latitude: number; longitude: number } }) => {
     let  location: [number, number] = [position.coords.latitude, position.coords.longitude] 
     if (location[0] === updatedLocation[0]) {
       return
     }
     setUpdatedLocation([...location])
-    const movedEnough = verifyMoved([...previousLocation], [...location])
-    if (movedEnough) {
-      setPreviousLocation([...location])
+    if (!justMoved) {
       populateShadows([...location])
+      setJustMoved(true)
     }
 }
 
