@@ -26,11 +26,15 @@ $bg: #FAF0E7;
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
 
+html {
+    width: 100%;
+    height: 100%; 
+}
+
 body {
-    width: 100vw;
-    height: 100vh;
+    width: 100%;
+    height: 100%;
     overflow: hidden;
-    position: fixed;
 }
 
 #root {
@@ -80,7 +84,7 @@ button {
         @include flexCenter();
         flex-direction: column;
         justify-content: space-between;
-        height: 100vh;
+        height: 100%;
         .play_instructions {
             @include flexCenter();
             flex-direction: column;
@@ -248,7 +252,7 @@ button {
         max-width: 700px;
         padding: 1em;
         padding-top: 3em;
-        height: 100vh;
+        height: 100%;
         overflow: auto;
         margin: auto;
         .lights_container {
@@ -371,8 +375,8 @@ button {
 }
 
 .searching {
-    width: 100vw;
-    height: 100vh;
+    width: 100%;
+    height: 100%;
     background-color: $bg;
     overflow: hidden;
     @include flexCenter();
@@ -506,8 +510,8 @@ button {
 }
 
 .story {
-    width: 100vw;
-    height: 100vh;
+    width: 100%;
+    height: 100%;
     background-color: $bg;
     @include flexCenter();
     > div {
