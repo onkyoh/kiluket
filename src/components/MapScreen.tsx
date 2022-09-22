@@ -73,16 +73,7 @@ const MapScreen = ({setInGame, inGame, setLightStorage, lightStorage, userXp}: I
     let  location: [number, number] = [position.coords.latitude, position.coords.longitude] 
     if (location[0] === updatedLocation[0]) {
       return
-    }
-    if (!lastLocation) {
-      setLastLocation([...location])
-    } else {
-      if ((location[0] - 0.0002 < lastLocation[0] && lastLocation[0] < location[0] + 0.0002) || (location[1] - 0.0002 < lastLocation[1] && lastLocation[1] < location[1] + 0.0002)) {
-        setLastLocation([...location])
-        populateShadows([...location])
-
-      }
-    }   
+    } 
     setUpdatedLocation([...location])
 }
 
@@ -101,6 +92,15 @@ useEffect(() => {
     }
 
 }, [updatedLocation])
+
+useEffect(() => {
+  if (!gettingLocation) {
+    setInterval(() => {
+      populateShadows(updatedLocation)
+    }, 10000);
+  }
+}, [gettingLocation])
+
 
 useEffect(() => {
   if (!inGame) {
