@@ -42,7 +42,7 @@ const MapScreen = ({setInGame, inGame, setLightStorage, lightStorage, userXp}: I
   })
 
   const amountOfShadows = () => {
-    let shadowNumber = Math.round(Math.random() * 7)
+    let shadowNumber = Math.round(Math.random() * 4 + 3)
     return shadowNumber
   }
 
