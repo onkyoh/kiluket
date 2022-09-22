@@ -34,7 +34,7 @@ const MapScreen = ({setInGame, inGame, setLightStorage, lightStorage, userXp}: I
 
   const [gettingLocation, setGettingLocation] = useState(true)
 
-  const [justMoved, setJustMoved] = useState(false)
+  const [lastLocation, setLastLocation] = useState<undefined | [number, number]>()
 
   const shadowIcon = Leaflet.divIcon({
     className: 'shadow',
@@ -69,24 +69,21 @@ const MapScreen = ({setInGame, inGame, setLightStorage, lightStorage, userXp}: I
     setInGame(true)
   }
 
-  useEffect(() => {
-    if (justMoved) {
-      setTimeout(() => {
-        setJustMoved(false)
-      }, 5000)
-    }
-  }, [justMoved])
-
   const success = (position: { coords: { latitude: number; longitude: number } }) => {
     let  location: [number, number] = [position.coords.latitude, position.coords.longitude] 
     if (location[0] === updatedLocation[0]) {
       return
     }
+    if (!lastLocation) {
+      setLastLocation([...location])
+    } else {
+      if ((location[0] - 0.0002 < lastLocation[0] && lastLocation[0] < location[0] + 0.0002) || (location[1] - 0.0002 < lastLocation[1] && lastLocation[1] < location[1] + 0.0002)) {
+        setLastLocation([...location])
+        populateShadows([...location])
+
+      }
+    }   
     setUpdatedLocation([...location])
-    if (!justMoved) {
-      populateShadows([...location])
-      setJustMoved(true)
-    }
 }
 
 const failure = (err: {message: string}) => {
@@ -100,7 +97,9 @@ navigator.geolocation.watchPosition(success, failure, {
 useEffect(() => {
     if (updatedLocation[0] !== 0 && gettingLocation) {
       setGettingLocation(false)
+      populateShadows(updatedLocation)
     }
+
 }, [updatedLocation])
 
 useEffect(() => {
