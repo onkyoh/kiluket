@@ -79,7 +79,6 @@ button {
     height: 100%;
     z-index: 1000;
     background-color: $bg;
-    position: relative;
     .play_room {
         @include flexCenter();
         flex-direction: column;
@@ -242,6 +241,7 @@ button {
 }
 
 .inventory {
+    overflow: hidden;
     .lights_grid {
         display: flex;
         justify-content: center;

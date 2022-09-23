@@ -86,6 +86,11 @@ navigator.geolocation.watchPosition(success, failure, {
   });
 
 useEffect(() => {
+  navigator.geolocation.getCurrentPosition(success, failure);
+
+}, [])
+
+useEffect(() => {
     if (updatedLocation[0] !== 0 && gettingLocation) {
       setGettingLocation(false)
       populateShadows(updatedLocation)

@@ -62,7 +62,6 @@ button {
   height: 100%;
   z-index: 1000;
   background-color: #FAF0E7;
-  position: relative;
 }
 .play_screen .play_room {
   display: flex;
@@ -245,6 +244,9 @@ button {
   z-index: 401;
 }
 
+.inventory {
+  overflow: hidden;
+}
 .inventory .lights_grid {
   display: flex;
   justify-content: center;
