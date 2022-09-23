@@ -75,10 +75,12 @@ button {
 }
 
 .play_screen {
+    position: fixed;
     width: 100%;
     height: 100%;
     z-index: 1000;
     background-color: $bg;
+    overflow: hidden;
     .play_room {
         @include flexCenter();
         flex-direction: column;

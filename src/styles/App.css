@@ -58,10 +58,12 @@ button {
 }
 
 .play_screen {
+  position: fixed;
   width: 100%;
   height: 100%;
   z-index: 1000;
   background-color: #FAF0E7;
+  overflow: hidden;
 }
 .play_screen .play_room {
   display: flex;
