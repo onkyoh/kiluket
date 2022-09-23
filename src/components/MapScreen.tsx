@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useContext } from 'react'
 import { MapContainer, Marker, TileLayer} from 'react-leaflet'
 import Leaflet from "leaflet"
 import SetCenter from './SetCenter'
@@ -7,6 +7,7 @@ import Quests from '../navComponents/Quests'
 import XpBar from './XpBar'
 import quests from '../icons/quests.png'
 import inventory from '../icons/inventory.png'
+import { LocationContext } from '../App'
 
 interface shadow {
   id: number
@@ -34,7 +35,7 @@ const MapScreen = ({setInGame, inGame, setLightStorage, lightStorage, userXp}: I
 
   const [gettingLocation, setGettingLocation] = useState(true)
 
-  const [lastLocation, setLastLocation] = useState<undefined | [number, number]>()
+  const prefetchedLocation = useContext(LocationContext)
 
   const shadowIcon = Leaflet.divIcon({
     className: 'shadow',
@@ -87,7 +88,9 @@ navigator.geolocation.watchPosition(success, failure, {
 
 useEffect(() => {
   navigator.geolocation.getCurrentPosition(success, failure);
-
+  if (prefetchedLocation) {
+    setUpdatedLocation([...prefetchedLocation])
+  }
 }, [])
 
 useEffect(() => {

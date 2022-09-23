@@ -102,7 +102,7 @@ button {
   background-color: white;
   top: 50%;
   left: 50%;
-  translate: -50% -50%;
+  transform: translate(-50%, -50%);
   width: 300px;
   text-align: center;
 }
@@ -157,7 +157,7 @@ button {
   z-index: 400;
   position: fixed;
   left: 50%;
-  translate: -50%;
+  transform: translate(-50%, 0);
   background-color: white;
   box-shadow: 0px 0px 8px black;
   border: 1px solid black;
@@ -220,7 +220,7 @@ button {
   margin: auto;
   bottom: 1em;
   left: 50%;
-  translate: -50%;
+  transform: translate(-50%, 0);
   width: min(95%, 300px);
   z-index: 400;
   display: flex;
@@ -289,7 +289,7 @@ button {
   position: absolute;
   top: 50%;
   left: 50%;
-  translate: -50% -50%;
+  transform: translate(-50%, -50%);
   text-align: center;
   gap: 1em;
   padding: 1em;
@@ -472,25 +472,25 @@ button {
 .searching #compass #dial #markings span:nth-of-type(1) {
   top: 0;
   left: 50%;
-  translate: -50% 0;
+  transform: translate(-50%, 0);
   rotate: 90deg;
 }
 .searching #compass #dial #markings span:nth-of-type(2) {
   top: 50%;
   right: 0;
-  translate: 0% -50%;
+  transform: translate(0%, -50%);
   rotate: 180deg;
 }
 .searching #compass #dial #markings span:nth-of-type(3) {
   bottom: 0%;
   left: 50%;
-  translate: -50% 0;
+  transform: translate(-50%, 0);
   rotate: 270deg;
 }
 .searching #compass #dial #markings span:nth-of-type(4) {
   top: 50%;
   left: 0;
-  translate: 0% -50%;
+  transform: translate(0%, -50%);
 }
 .searching #compass #dial #needle {
   width: 130px;
@@ -508,7 +508,7 @@ button {
   position: absolute;
   top: 50%;
   left: 50%;
-  translate: -50% -50%;
+  transform: translate(-50%, -50%);
   border-radius: 50%;
   height: 1em;
   width: 1em;
