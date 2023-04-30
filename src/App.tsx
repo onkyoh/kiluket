@@ -1,5 +1,5 @@
 import './styles/App.css';
-import GameScreen from './components/GameScreen'
+import Layout from './components/Layout/Layout'
 import {useState, createContext} from 'react'
 
 export const LocationContext = createContext({} as [number, number] | undefined);
@@ -13,13 +13,12 @@ function App() {
     if (location) {
       setLocationContext([...location])
     }
-
   });
 
   return (
     <div className='app'>
       <LocationContext.Provider value={locationContext}>
-        <GameScreen/>
+        <Layout/>
       </LocationContext.Provider>
     </div>
   );
