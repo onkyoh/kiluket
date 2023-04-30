@@ -7,9 +7,9 @@ const PanelZero = ({setStoryIdx, storyIdx}) => {
   }
 
   return (
-    <div className='dark_panels'>
+    <div className='dark-panels'>
         <p>In the beginning there was only chaos and darkness. Ominous beings known as shadows filled every corner of the world. Until... they arrived...</p>
-        <div className='shadow_box'>
+        <div className='shadow-box'>
             <span></span>
             <span></span>
             <span></span>

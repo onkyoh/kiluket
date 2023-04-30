@@ -47,10 +47,6 @@ body {
     height: 100%;
 }
 
-.app {
-    @include flexCenter();
-}
-
 .icon {
     border-radius: 50%;
     background-color: white;
@@ -61,6 +57,7 @@ button {
     border: 1px solid black;
     padding: 0.25em;
     box-shadow: 0px 0px 4px black;
+    cursor: pointer;
 }
 
 .shadow {
@@ -74,19 +71,19 @@ button {
     color: white;
 }
 
-.play_screen {
+.play-screen {
     position: fixed;
     width: 100%;
     height: 100%;
     z-index: 1000;
     background-color: $bg;
     overflow: hidden;
-    .play_room {
+    .play-room {
         @include flexCenter();
         flex-direction: column;
         justify-content: space-between;
         height: 100%;
-        .play_instructions {
+        .play-instructions {
             @include flexCenter();
             flex-direction: column;
             justify-content: space-between;
@@ -101,7 +98,7 @@ button {
             background-color: white;
         }
     }
-    .freed_light {
+    .freed-light {
         @include flexCenter();
         flex-direction: column;
         gap: 0.5em;
@@ -115,7 +112,7 @@ button {
         transform: translate(-50%, -50%);
         width: 300px;
         text-align: center;
-        .light_container {
+        .light-container {
             width: 100px;
             height: 100px;
             @include flexCenter();
@@ -123,7 +120,7 @@ button {
     }
 }
 
-.grid_layout {
+.grid-layout {
     display: grid;
     width: fit-content;
     grid-template-areas: 
@@ -153,13 +150,13 @@ button {
    }
 }
 
-.leave_button {
-    position: fixed;
+.leave-button {
+    position: absolute;
     top: 0.5em;
     left: 0.5em;
 }
 
-.xp_bar {
+.xp-bar {
     @include flexCenter();
     flex-direction: column;
     z-index: 400;
@@ -213,7 +210,7 @@ button {
     }
 }
 
-.nav {
+.nav-buttons {
     position: fixed;
     margin: auto;
     bottom: 1em;
@@ -223,28 +220,38 @@ button {
     z-index: 400;
     @include flexCenter();
     justify-content: space-between;
+    button {
+        height: 3.5em;
+        width: 3.5em;
+    }
     img {
         background-color: white;
-        width: 55px;
-        height: 55px;
-        padding: 5px;
-        box-shadow: 0px 0px 8px black;
-        border: 1px solid black;
+        height: 100%;
+        width: 100%;
     }
 }
 
-.nav_directory {
-    width: 100%;
-    height: 100%;
+.popup {
     position: absolute;
     background-color: $bg;
+    height: 100%;
+    width: 100%;
+    z-index: 400;
     top: 0;
-    z-index: 401;
+    .popup-buttons {
+        position: absolute;
+        top: 1em;
+        width: calc(min(95%, 300px));
+        left: 50%;
+        transform: translate(-50%, 0);
+        @include flexCenter();
+        justify-content: space-between;
+    }
 }
 
 .inventory {
-    overflow: hidden;
-    .lights_grid {
+    width: 100vw;
+    .lights-grid {
         display: flex;
         justify-content: center;
         align-content: flex-start;
@@ -257,21 +264,16 @@ button {
         height: 100%;
         overflow: auto;
         margin: auto;
-        .lights_container {
+        .lights-container {
             width: 100px;
             height: 100px;
             @include flexCenter();
         }
     }
-    .delete_button {
-        position: fixed;
-        top: 0.5em;
-        right: 0.5em;
-    }
     button {
         z-index: 401;
     }
-    .delete_modal {
+    .delete-modal {
         @include flexCenter();
         flex-direction: column;
         border: 2px solid black;
@@ -289,23 +291,19 @@ button {
     }
 }
 
-.lights {
-    aspect-ratio: 1/1;
-    border-radius: 50%;
-}
-
 .quests {
     @include flexCenter();
     flex-direction: column;
-    overflow: auto;
     gap: 1.5em;
-    .size_container {
+    width: 100vw;
+    height: 100%;
+    .size-container {
         @include flexCenter();
         width: fit-content;
         border-radius: 15px;
         overflow: hidden;
         transition: all 0.5s ease-in-out;
-        .color_container {
+        .color-container {
             width: 60px;
             height: 60px;
             @include flexCenter();
@@ -320,9 +318,6 @@ button {
         font-size: 1.5em;
         font-weight: bold;
         font-family: 'Times New Roman', Times, serif;
-        position: fixed;
-        top: 0.25em;
-        right: 0.25em;
     }
     span {
         width: 300px;
@@ -337,9 +332,15 @@ button {
         border: 2px solid black;
         text-align: center;
         gap: 1em;
+        position: fixed;
     }
 }
 
+
+.lights {
+    aspect-ratio: 1/1;
+    border-radius: 50%;
+}
 
 .three {width: 40%;}
 
@@ -428,20 +429,20 @@ button {
                     border-radius: 0 50% 50% 0;
                     box-shadow: 0px 0px 2px black;
                     &:nth-of-type(1) {
-                        top: 0;
-                        left: 50%;
+                        top: 0.5em;
+                        left: calc(50% - 0.5em);
                         transform: translate(-50%, 0);
                         rotate: 90deg;
                     }
                     &:nth-of-type(2) {
-                        top: 50%;
+                        top: calc(50% - 1em);
                         right: 0;
                         transform: translate(0%, -50%);
                         rotate: 180deg;
                     }
                     &:nth-of-type(3) {
-                        bottom: 0%;
-                        left: 50%;
+                        bottom: calc(0% + 0.5em);
+                        left: calc(50% - 0.5em);
                         transform: translate(-50%, 0);
                         rotate: 270deg;
                     }
@@ -520,8 +521,8 @@ button {
         @include flexCenter();
         flex-direction: column;
         justify-content: space-between;
-        width: calc(min(100%, 500px));
-        height: calc(min(100%, 1000px));
+        width: 100%;
+        height: 100%;
         padding: 2em 1em;
         box-shadow: inset 0px 0px 20px 20px black;
         p {
@@ -532,10 +533,10 @@ button {
             box-shadow: 0px 0px 8px black;
         }
     }
-    .dark_panels {
+    .dark-panels {
         background-color: rgba(15, 15, 15, 0.8);
     }
-    .shadow_box {
+    .shadow-box {
         display: grid;
         gap: 2em;
         grid-template-areas:
@@ -563,7 +564,7 @@ button {
             }
        }
     }
-    .light_box {
+    .light-box {
         display: grid;
         gap: 2em;
         grid-template-areas:

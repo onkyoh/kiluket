@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react'
+import {useMemo} from 'react'
 
 interface IProps {
   userXp: number
@@ -6,29 +6,18 @@ interface IProps {
 
 const XpBar = ({userXp}: IProps) => {
 
-  const [level, setLevel] = useState(0)
-
-  const [prevLevel, setPrevLevel] = useState(-1)
-
-  const calcLevel = (xp: number) => {
-    const currentLevel = Math.floor(Math.pow(xp, 0.8)/100)
+  const level = useMemo(() => {
+    const currentLevel = Math.floor(Math.pow(userXp, 0.8)/100)
     return currentLevel
-  }
-
-  useEffect(() => {
-    if (level !== prevLevel) {
-      setPrevLevel(level)
-    }
-    setLevel(calcLevel(userXp))
   }, [userXp])
+
 
   const fillerBar = {
     width: `${Math.ceil(userXp - Math.pow(((level)*100), 1/0.8))/Math.ceil(Math.pow(((level+1)*100), 1/0.8) - Math.pow(((level)*100), 1/0.8)) * 100}%`,
   }
 
-
   return (
-    <div className='xp_bar'>
+    <div className='xp-bar'>
       <span className='level'>Lv.{level}</span>
       <div className='bar'>
         <div style={fillerBar}></div>

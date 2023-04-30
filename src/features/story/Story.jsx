@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import {useState} from 'react'
 import PanelZero from './PanelZero'
 import PanelOne from './PanelOne'
 import PanelTwo from './PanelTwo'

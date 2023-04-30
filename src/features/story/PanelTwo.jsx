@@ -1,5 +1,3 @@
-import React from 'react'
-
 const PanelTwo = ({setStoryIdx, storyIdx}) => {
 
   const handleIdx = () => {
@@ -9,9 +7,9 @@ const PanelTwo = ({setStoryIdx, storyIdx}) => {
   return (
     <div>
         <p>
-          The surge of freed lights brought about an era of peace and prosperity and the 'thing' that freed the lights was heralded as the 'kiluket' or he who brings light.
+          The surge of freed lights brought about an era of peace and prosperity and the 'thing' that caused it was heralded as the 'kiluket' or he who brings light.
         </p>
-        <div className='light_box'>
+        <div className='light-box'>
             <span></span>
             <span></span>
             <span></span>

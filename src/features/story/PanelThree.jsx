@@ -1,5 +1,3 @@
-import React from 'react'
-
 const PanelThree = ({setStoryIdx, storyIdx, setUserXp}) => {
 
   const handleStartGame = () => {
@@ -8,12 +6,12 @@ const PanelThree = ({setStoryIdx, storyIdx, setUserXp}) => {
   }
 
   return (
-    <div className='dark_panels'>
+    <div className='dark-panels'>
         <p>
           Then the 'kiluket' vanished. 
           Almost immediately, lights were once again being consumed by the shadows, and slowly the chaos and darkness of old times enshrouded the world. Until...
         </p>
-        <div className='shadow_box'>
+        <div className='shadow-box'>
             <span></span>
             <span></span>
             <span></span>

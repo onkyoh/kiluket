@@ -27,12 +27,6 @@ body {
   height: 100%;
 }
 
-.app {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
 .icon {
   border-radius: 50%;
   background-color: white;
@@ -44,6 +38,7 @@ button {
   border: 1px solid black;
   padding: 0.25em;
   box-shadow: 0px 0px 4px black;
+  cursor: pointer;
 }
 
 .shadow {
@@ -57,7 +52,7 @@ button {
   color: white;
 }
 
-.play_screen {
+.play-screen {
   position: fixed;
   width: 100%;
   height: 100%;
@@ -65,7 +60,7 @@ button {
   background-color: #FAF0E7;
   overflow: hidden;
 }
-.play_screen .play_room {
+.play-screen .play-room {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -73,7 +68,7 @@ button {
   justify-content: space-between;
   height: 100%;
 }
-.play_screen .play_room .play_instructions {
+.play-screen .play-room .play-instructions {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -89,7 +84,7 @@ button {
   box-shadow: 0px 0px 8px black;
   background-color: white;
 }
-.play_screen .freed_light {
+.play-screen .freed-light {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -106,7 +101,7 @@ button {
   width: 300px;
   text-align: center;
 }
-.play_screen .freed_light .light_container {
+.play-screen .freed-light .light-container {
   width: 100px;
   height: 100px;
   display: flex;
@@ -114,15 +109,14 @@ button {
   align-items: center;
 }
 
-.grid_layout {
+.grid-layout {
   display: grid;
-  width: -webkit-fit-content;
   width: -moz-fit-content;
   width: fit-content;
   grid-template-areas: ". a ." "b . c" ". d .";
   margin: auto;
 }
-.grid_layout button {
+.grid-layout button {
   width: 100px;
   height: 100px;
   border-radius: 50%;
@@ -130,26 +124,26 @@ button {
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
   -webkit-tap-highlight-color: transparent;
 }
-.grid_layout button:nth-of-type(1) {
+.grid-layout button:nth-of-type(1) {
   grid-area: a;
 }
-.grid_layout button:nth-of-type(2) {
+.grid-layout button:nth-of-type(2) {
   grid-area: b;
 }
-.grid_layout button:nth-of-type(3) {
+.grid-layout button:nth-of-type(3) {
   grid-area: c;
 }
-.grid_layout button:nth-of-type(4) {
+.grid-layout button:nth-of-type(4) {
   grid-area: d;
 }
 
-.leave_button {
-  position: fixed;
+.leave-button {
+  position: absolute;
   top: 0.5em;
   left: 0.5em;
 }
 
-.xp_bar {
+.xp-bar {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -166,11 +160,11 @@ button {
   padding: 0.25em;
   gap: 0.25em;
 }
-.xp_bar .level {
+.xp-bar .level {
   width: 90%;
   text-align: start;
 }
-.xp_bar .bar {
+.xp-bar .bar {
   width: 90%;
   background-color: rgba(15, 15, 15, 0.9);
   border-radius: 0.5em;
@@ -178,12 +172,12 @@ button {
   border: 1px solid black;
   overflow: hidden;
 }
-.xp_bar .bar div {
+.xp-bar .bar div {
   height: 1em;
   background-color: rgb(241, 226, 14);
   position: relative;
 }
-.xp_bar .bar div::after {
+.xp-bar .bar div::after {
   content: "";
   position: absolute;
   right: -0.5em;
@@ -191,16 +185,7 @@ button {
   height: 100%;
   background-color: rgb(241, 226, 14);
   border-radius: 52% 48% 47% 53%/49% 51% 54% 46%;
-  -webkit-animation: spin 2s infinite linear;
-          animation: spin 2s infinite linear;
-}
-@-webkit-keyframes spin {
-  from {
-    rotate: 0deg;
-  }
-  to {
-    rotate: 360deg;
-  }
+  animation: spin 2s infinite linear;
 }
 @keyframes spin {
   from {
@@ -210,12 +195,12 @@ button {
     rotate: 360deg;
   }
 }
-.xp_bar .progress {
+.xp-bar .progress {
   width: 90%;
   text-align: end;
 }
 
-.nav {
+.nav-buttons {
   position: fixed;
   margin: auto;
   bottom: 1em;
@@ -228,28 +213,40 @@ button {
   align-items: center;
   justify-content: space-between;
 }
-.nav img {
+.nav-buttons button {
+  height: 3.5em;
+  width: 3.5em;
+}
+.nav-buttons img {
   background-color: white;
-  width: 55px;
-  height: 55px;
-  padding: 5px;
-  box-shadow: 0px 0px 8px black;
-  border: 1px solid black;
+  height: 100%;
+  width: 100%;
 }
 
-.nav_directory {
-  width: 100%;
-  height: 100%;
+.popup {
   position: absolute;
   background-color: #FAF0E7;
+  height: 100%;
+  width: 100%;
+  z-index: 400;
   top: 0;
-  z-index: 401;
+}
+.popup .popup-buttons {
+  position: absolute;
+  top: 1em;
+  width: min(95%, 300px);
+  left: 50%;
+  transform: translate(-50%, 0);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .inventory {
-  overflow: hidden;
+  width: 100vw;
 }
-.inventory .lights_grid {
+.inventory .lights-grid {
   display: flex;
   justify-content: center;
   align-content: flex-start;
@@ -263,22 +260,17 @@ button {
   overflow: auto;
   margin: auto;
 }
-.inventory .lights_grid .lights_container {
+.inventory .lights-grid .lights-container {
   width: 100px;
   height: 100px;
   display: flex;
   justify-content: center;
   align-items: center;
 }
-.inventory .delete_button {
-  position: fixed;
-  top: 0.5em;
-  right: 0.5em;
-}
 .inventory button {
   z-index: 401;
 }
-.inventory .delete_modal {
+.inventory .delete-modal {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -297,31 +289,26 @@ button {
   z-index: 402;
 }
 
-.lights {
-  aspect-ratio: 1/1;
-  border-radius: 50%;
-}
-
 .quests {
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  overflow: auto;
   gap: 1.5em;
+  width: 100vw;
+  height: 100%;
 }
-.quests .size_container {
+.quests .size-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: -webkit-fit-content;
   width: -moz-fit-content;
   width: fit-content;
   border-radius: 15px;
   overflow: hidden;
   transition: all 0.5s ease-in-out;
 }
-.quests .size_container .color_container {
+.quests .size-container .color-container {
   width: 60px;
   height: 60px;
   display: flex;
@@ -339,9 +326,6 @@ button {
   font-size: 1.5em;
   font-weight: bold;
   font-family: "Times New Roman", Times, serif;
-  position: fixed;
-  top: 0.25em;
-  right: 0.25em;
 }
 .quests span {
   width: 300px;
@@ -358,6 +342,12 @@ button {
   border: 2px solid black;
   text-align: center;
   gap: 1em;
+  position: fixed;
+}
+
+.lights {
+  aspect-ratio: 1/1;
+  border-radius: 50%;
 }
 
 .three {
@@ -417,8 +407,7 @@ button {
   gap: 2em;
 }
 .searching #elips {
-  -webkit-animation: up;
-          animation: up;
+  animation: up;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -430,16 +419,13 @@ button {
   transition: all ease-in-out;
 }
 .searching #elips span:nth-of-type(1) {
-  -webkit-animation: bounce 1.5s linear 0.6s infinite;
-          animation: bounce 1.5s linear 0.6s infinite;
+  animation: bounce 1.5s linear 0.6s infinite;
 }
 .searching #elips span:nth-of-type(2) {
-  -webkit-animation: bounce 1.5s linear 1.2s infinite;
-          animation: bounce 1.5s linear 1.2s infinite;
+  animation: bounce 1.5s linear 1.2s infinite;
 }
 .searching #elips span:nth-of-type(3) {
-  -webkit-animation: bounce 1.5s linear 1.7s infinite;
-          animation: bounce 1.5s linear 1.7s infinite;
+  animation: bounce 1.5s linear 1.7s infinite;
 }
 .searching #compass {
   height: 200px;
@@ -470,20 +456,20 @@ button {
   box-shadow: 0px 0px 2px black;
 }
 .searching #compass #dial #markings span:nth-of-type(1) {
-  top: 0;
-  left: 50%;
+  top: 0.5em;
+  left: calc(50% - 0.5em);
   transform: translate(-50%, 0);
   rotate: 90deg;
 }
 .searching #compass #dial #markings span:nth-of-type(2) {
-  top: 50%;
+  top: calc(50% - 1em);
   right: 0;
   transform: translate(0%, -50%);
   rotate: 180deg;
 }
 .searching #compass #dial #markings span:nth-of-type(3) {
-  bottom: 0%;
-  left: 50%;
+  bottom: calc(0% + 0.5em);
+  left: calc(50% - 0.5em);
   transform: translate(-50%, 0);
   rotate: 270deg;
 }
@@ -500,8 +486,7 @@ button {
   align-items: center;
   position: absolute;
   filter: drop-shadow(0px 0px 2px black);
-  -webkit-animation: spin 10s linear infinite;
-          animation: spin 10s linear infinite;
+  animation: spin 10s linear infinite;
 }
 .searching #compass #dial #needle::after {
   content: "";
@@ -569,8 +554,8 @@ button {
   align-items: center;
   flex-direction: column;
   justify-content: space-between;
-  width: min(100%, 500px);
-  height: min(100%, 1000px);
+  width: 100%;
+  height: 100%;
   padding: 2em 1em;
   box-shadow: inset 0px 0px 20px 20px black;
 }
@@ -581,57 +566,57 @@ button {
   border: 1px solid black;
   box-shadow: 0px 0px 8px black;
 }
-.story .dark_panels {
+.story .dark-panels {
   background-color: rgba(15, 15, 15, 0.8);
 }
-.story .shadow_box {
+.story .shadow-box {
   display: grid;
   gap: 2em;
   grid-template-areas: ". a ." "b . ." ". . c";
 }
-.story .shadow_box span {
+.story .shadow-box span {
   border-radius: 50%;
   background-color: rgba(15, 15, 15, 0.9);
   box-shadow: 0px 0px 8px 8px black;
 }
-.story .shadow_box span:nth-of-type(1) {
+.story .shadow-box span:nth-of-type(1) {
   grid-area: a;
   height: 50px;
   width: 50px;
 }
-.story .shadow_box span:nth-of-type(2) {
+.story .shadow-box span:nth-of-type(2) {
   grid-area: b;
   height: 70px;
   width: 70px;
 }
-.story .shadow_box span:nth-of-type(3) {
+.story .shadow-box span:nth-of-type(3) {
   grid-area: c;
   height: 30px;
   width: 30px;
 }
-.story .light_box {
+.story .light-box {
   display: grid;
   gap: 2em;
   grid-template-areas: "a . ." ". . b" ". c .";
 }
-.story .light_box span {
+.story .light-box span {
   border-radius: 50%;
 }
-.story .light_box span:nth-of-type(1) {
+.story .light-box span:nth-of-type(1) {
   grid-area: a;
   height: 50px;
   width: 50px;
   background-color: rgba(241, 14, 44, 0.5);
   box-shadow: 0px 0px 15px 4px rgb(241, 14, 44);
 }
-.story .light_box span:nth-of-type(2) {
+.story .light-box span:nth-of-type(2) {
   grid-area: b;
   height: 70px;
   width: 70px;
   background-color: rgba(120, 14, 241, 0.5);
   box-shadow: 0px 0px 15px 4px rgb(120, 14, 241);
 }
-.story .light_box span:nth-of-type(3) {
+.story .light-box span:nth-of-type(3) {
   grid-area: c;
   height: 30px;
   width: 30px;

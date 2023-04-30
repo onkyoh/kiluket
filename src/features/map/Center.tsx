@@ -3,10 +3,10 @@ import { useEffect } from "react"
 import { useMap, Marker } from "react-leaflet"
 
 interface IProps {
-    updatedLocation: [number, number]
+    location: [number, number]
 }
 
-const SetCenter = ({updatedLocation}: IProps) => {
+const Center = ({location}: IProps) => {
     const map = useMap()
 
     const icon = Leaflet.divIcon({
@@ -21,12 +21,12 @@ const SetCenter = ({updatedLocation}: IProps) => {
     }
 
     useEffect(() => {
-        map.setView(updatedLocation, 19, setViewOptions)
-    }, [updatedLocation])
+        map.setView(location, 19, setViewOptions)
+    }, [location])
 
     return (
-        <Marker icon={icon} position={updatedLocation} keyboard={false}/>
+        <Marker icon={icon} position={location} keyboard={false}/>
     )
 }
 
-export default SetCenter
+export default Center
