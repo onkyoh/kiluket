@@ -2,7 +2,7 @@
 
 ## About ##
 
-Kiluket was a probably the only project of mine I would say was more for passion rather than to solve a problem. I made kiluket because I wanted to make a game via React. Thus, I made a simple game where the user is as character who must free lights from the grasp of the shadows possessing them. The mechanics for doing so is by the user relaying a pattern shown on a 4 button grid. Since the game relies on movement to encounter new shadows I made it optimally suitable for mobile by making it a progressive web app that works offline.
+Up until the time of writing this, Kiluket is one of the only projects of mine that I created because of recreation rather than to solve a problem. I made kiluket because I wanted to make a game via React. Thus, I made a simple game where the user is as character who must free lights from the grasp of the shadows possessing them. The mechanics for doing so is by the user relaying a pattern shown on a 4 button grid. Since the game relies on movement to encounter new shadows I made it optimally suitable for mobile by making it a progressive web app that works offline.
 
 ## Features ##
 
